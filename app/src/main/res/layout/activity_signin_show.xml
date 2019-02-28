@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:fitsSystemWindows="true">
+    <include layout="@layout/layout_actionbar"/>
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:layout_height="70dp"
+                android:layout_width="match_parent"
+                >
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    >
+                    <TextView
+                        android:id="@+id/tv_qd"
+                        android:textSize="20sp"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="签到中..."
+                        />
+                    <TextView
+                        android:id="@+id/tv_time"
+                        android:textSize="20sp"
+                        android:layout_height="40dp"
+                        android:layout_width="120dp"
+                        android:gravity="center"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:background="@drawable/time_bg"
+                        android:layout_toRightOf="@+id/tv_qd"
+                        android:textColor="@color/white"
+                        tools:text="0 秒"
+                        />
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_height="50dp"
+                android:layout_width="match_parent"
+                >
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    >
+                    <TextView
+                        android:id="@+id/tv_yqd"
+                        android:textSize="20sp"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="已签到: "
+                        />
+                    <TextView
+                        android:id="@+id/tv_qd_count"
+                        android:textSize="20sp"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:gravity="center"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:layout_toRightOf="@+id/tv_yqd"
+                        android:text="1"
+                        />
+                    <TextView
+                        android:id="@+id/tv_split"
+                        android:textSize="20sp"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:gravity="center"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_toRightOf="@+id/tv_qd_count"
+                        android:text="/"
+                        />
+                    <TextView
+                        android:id="@+id/tv_all_count"
+                        android:textSize="20sp"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:gravity="center"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_toRightOf="@+id/tv_split"
+                        android:text="10"
+                        />
+                    <TextView
+
+                        android:textSize="20sp"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:gravity="center"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_toRightOf="@+id/tv_all_count"
+                        android:text="人"
+                        />
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+
+            <svs.meeting.widgets.Mylistview
+                android:id="@+id/listview"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:scrollbars="none"
+                />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

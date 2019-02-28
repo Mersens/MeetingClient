@@ -1,0 +1,32 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffffff"
+	>
+    <LinearLayout
+ 	    android:id="@+id/mainarea"
+ 	    android:orientation="vertical"
+ 	    android:layout_width="match_parent"
+ 	    android:layout_height="wrap_content"
+ 	    android:layout_centerHorizontal="true"
+ 	    android:layout_centerVertical="true"
+ 	    android:gravity="center"
+ 	   >
+		<ImageView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:src="@drawable/svs_logo"/>
+		<TextView
+		    android:layout_marginTop="15dp"
+		    android:id="@+id/itemText"
+		    android:textColor="#efefef"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textSize="10sp"
+		    android:text="系统启动中..."
+			android:visibility="gone"
+		    />
+ 	</LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fitsSystemWindows="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    >
+    <include layout="@layout/layout_actionbar" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="16dp"
+        >
+
+        <TextView
+            android:id="@+id/add_diary_tv_date"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:gravity="center_vertical"
+            android:paddingRight="5dp"
+            android:text="今天 2018-01-19"
+            android:textSize="16sp"
+            />
+
+        <EditText
+            android:id="@+id/add_diary_et_title"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/shape_add_diary_title"
+            android:enabled="true"
+            android:gravity="top"
+            android:maxLines="10"
+            android:minLines="8"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:scrollbars="vertical"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="20dp"/>
+
+        <svs.meeting.widgets.LinedEditText
+            android:id="@+id/add_diary_et_content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_add_diary_title"
+            android:enabled="true"
+            android:gravity="top"
+            android:lineSpacingExtra="5dp"
+            android:maxLines="20"
+            android:minLines="8"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            android:scrollbars="vertical"
+            android:textSize="16sp"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+
+
+
+</LinearLayout>

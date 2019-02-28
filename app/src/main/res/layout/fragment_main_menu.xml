@@ -1,0 +1,764 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal|center_vertical"
+        android:id="@+id/topPanel">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="此处为会议标题"
+            android:gravity="center"
+            android:id="@+id/txtTitle"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:id="@+id/contentPanel"
+        android:paddingBottom="0dp"
+        android:paddingTop="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        >
+
+        <svs.meeting.widgets.SmoothHorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <svs.meeting.widgets.DrawingOrderRelativeLayout
+                android:id="@+id/list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="left|center"
+                android:clipToPadding="false"
+                android:focusable="false"
+                android:gravity="center"
+                android:paddingEnd="40dp"
+                android:paddingStart="40dp" >
+
+                <svs.meeting.widgets.MetroItemFrameLayout
+                    android:id="@+id/view10"
+                    android:layout_width="@dimen/dp104"
+                    android:layout_height="@dimen/dp100"
+                    android:layout_alignBaseline="@+id/view"
+                    android:layout_gravity="top"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/border_shape"
+                    android:focusable="true"
+                    app:radius="4dp" >
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:alpha="0.9"
+                        android:background="@drawable/img_bg"
+                        >
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/img_bg"
+                            android:src="@drawable/ic_action_qd"
+                           />
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/border_down_shape"
+                        android:gravity="center|left"
+                        android:padding="15px"
+                        android:text="签到"
+                        android:textColor="@color/white"
+                        android:textSize="18dp" />
+
+                </svs.meeting.widgets.MetroItemFrameLayout>
+
+                <svs.meeting.widgets.MetroItemFrameLayout
+                    android:id="@+id/view11"
+                    android:layout_width="@dimen/dp104"
+                    android:layout_height="@dimen/dp100"
+                    android:layout_alignBottom="@+id/view"
+                    android:layout_below="@+id/view10"
+                    android:layout_alignLeft="@+id/view10"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toEndOf="@+id/view10"
+                    android:background="@drawable/border_shape"
+                    android:focusable="true"
+                    app:radius="4dp" >
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+
+                        android:alpha="0.9"
+                        android:background="@drawable/img_bg"
+                        >
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/img_bg"
+                            android:src="@drawable/ic_action_tpbj"
+                            />
+
+                    </FrameLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/border_down_shape"
+                        android:gravity="center|left"
+                        android:padding="15px"
+                        android:text="投票表决"
+                        android:textColor="@color/white"
+                        android:textSize="18dp" />
+                </svs.meeting.widgets.MetroItemFrameLayout>
+
+                <svs.meeting.widgets.MetroItemFrameLayout
+                    android:id="@+id/view"
+                    android:layout_width="@dimen/dp135"
+                    android:layout_height="@dimen/dp203"
+                    android:layout_margin="5dp"
+                    android:layout_toEndOf="@+id/view11"
+                    android:focusable="true"
+                    app:radius="4dp" >
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:alpha="0.9"
+                        android:background="@drawable/img_bg"
+                        >
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/img_bg"
+                            android:src="@drawable/ic_action_tpgx"
+                            />
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/border_down_shape"
+                        android:gravity="center|left"
+                        android:padding="15px"
+                        android:text="同屏共享"
+                        android:textColor="@color/white"
+                        android:textSize="18dp" />
+                </svs.meeting.widgets.MetroItemFrameLayout>
+
+                <svs.meeting.widgets.MetroItemFrameLayout
+                    android:id="@+id/view4"
+                    android:layout_width="@dimen/dp213"
+                    android:layout_height="@dimen/dp100"
+                    android:layout_alignTop="@+id/view"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_toEndOf="@+id/view"
+                    android:background="@drawable/border_shape"
+                    android:focusable="true"
+                    app:radius="4dp" >
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:alpha="0.9"
+                        android:background="@drawable/img_bg"
+                        >
+                        <ImageView
+                            android:id="@+id/img_zthy"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/img_bg"
+                            android:src="@drawable/ic_action_zthy"
+                            />
+
+                    </FrameLayout>
+                    <TextView
+                        android:id="@+id/tv_zthy"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/border_down_shape"
+                        android:gravity="center|left"
+                        android:padding="15px"
+                        android:text="暂停会议"
+                        android:textColor="@color/white"
+                        android:textSize="18dp" />
+                </svs.meeting.widgets.MetroItemFrameLayout>
+
+                <svs.meeting.widgets.MetroItemFrameLayout
+                    android:id="@+id/view2"
+                    android:layout_width="@dimen/dp104"
+                    android:layout_height="@dimen/dp100"
+                    android:layout_alignBaseline="@+id/view"
+                    android:layout_alignBottom="@+id/view"
+                    android:layout_below="@+id/view4"
+                    android:layout_gravity="bottom"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toEndOf="@+id/view3"
+                    android:background="@drawable/border_shape"
+                    android:focusable="true"
+                    app:radius="4dp" >
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:alpha="0.9"
+                        android:background="@drawable/img_bg"
+                        >
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/img_bg"
+                            android:src="@drawable/ic_action_hybj"
+                            />
+
+                    </FrameLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/border_down_shape"
+                        android:gravity="center|left"
+                        android:padding="15px"
+                        android:text="会议笔记"
+                        android:textColor="@color/white"
+                        android:textSize="18dp" />
+                </svs.meeting.widgets.MetroItemFrameLayout>
+
+                <svs.meeting.widgets.MetroItemFrameLayout
+                    android:id="@+id/view3"
+                    android:layout_width="@dimen/dp104"
+                    android:layout_height="@dimen/dp100"
+                    android:layout_alignBottom="@+id/view"
+                    android:layout_below="@+id/view4"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toEndOf="@+id/view"
+                    android:background="@drawable/border_shape"
+                    android:focusable="true"
+                    app:radius="4dp" >
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:alpha="0.9"
+                        android:background="@drawable/img_bg"
+                        >
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/img_bg"
+                            android:src="@drawable/ic_action_jsjl"
+                            />
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/border_down_shape"
+                        android:gravity="center|left"
+                        android:padding="15px"
+                        android:text="即时交流"
+                        android:textColor="@color/white"
+                        android:textSize="18dp" />
+                </svs.meeting.widgets.MetroItemFrameLayout>
+
+                <svs.meeting.widgets.MetroItemFrameLayout
+                    android:id="@+id/view5"
+                    android:layout_width="@dimen/dp104"
+                    android:layout_height="@dimen/dp100"
+                    android:layout_alignBaseline="@+id/view"
+                    android:layout_gravity="top"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_toEndOf="@+id/view4"
+                    android:layout_toRightOf="@+id/view4"
+                    android:layout_alignTop="@+id/view"
+                    android:background="@drawable/border_shape"
+                    android:focusable="true"
+                    app:radius="4dp" >
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:alpha="0.9"
+                        android:background="@drawable/img_bg"
+                        >
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/img_bg"
+                            android:src="@drawable/ic_action_hyzl"
+                            />
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/border_down_shape"
+                        android:gravity="center|left"
+                        android:padding="15px"
+                        android:text="会议资料"
+                        android:textColor="@color/white"
+                        android:textSize="18dp" />
+
+                </svs.meeting.widgets.MetroItemFrameLayout>
+
+                <svs.meeting.widgets.MetroItemFrameLayout
+                    android:id="@+id/view6"
+                    android:layout_width="@dimen/dp104"
+                    android:layout_height="@dimen/dp100"
+                    android:layout_alignBottom="@+id/view"
+                    android:layout_below="@+id/view5"
+                    android:layout_alignLeft="@+id/view5"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toEndOf="@+id/view5"
+                    android:background="@drawable/border_shape"
+                    android:focusable="true"
+                    app:radius="4dp" >
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:alpha="0.9"
+                        android:background="@drawable/img_bg"
+                        >
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/img_bg"
+                            android:src="@drawable/ic_action_hjfw"
+                            />
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/border_down_shape"
+                        android:gravity="center|left"
+                        android:padding="15px"
+                        android:text="呼叫服务"
+                        android:textColor="@color/white"
+                        android:textSize="18dp" />
+
+                </svs.meeting.widgets.MetroItemFrameLayout>
+
+                <svs.meeting.widgets.MetroItemFrameLayout
+                    android:id="@+id/view12"
+                    android:layout_width="@dimen/dp104"
+                    android:layout_height="@dimen/dp100"
+                    android:layout_alignBaseline="@+id/view"
+                    android:layout_gravity="top"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_toEndOf="@+id/view5"
+                    android:layout_toRightOf="@+id/view5"
+                    android:layout_alignTop="@+id/view"
+                    android:background="@drawable/border_shape"
+                    android:focusable="true"
+                    app:radius="4dp" >
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:alpha="0.9"
+                        android:background="@drawable/img_bg"
+                        >
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/img_bg"
+                            android:src="@drawable/ic_action_jsq"
+                            />
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/border_down_shape"
+                        android:gravity="center|left"
+                        android:padding="15px"
+                        android:text="计算器"
+                        android:textColor="@color/white"
+                        android:textSize="18dp" />
+
+                </svs.meeting.widgets.MetroItemFrameLayout>
+
+                <svs.meeting.widgets.MetroItemFrameLayout
+                    android:id="@+id/view13"
+                    android:layout_width="@dimen/dp104"
+                    android:layout_height="@dimen/dp100"
+                    android:layout_alignBottom="@+id/view"
+                    android:layout_below="@+id/view12"
+                    android:layout_alignLeft="@+id/view12"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toEndOf="@+id/view12"
+                    android:background="@drawable/border_shape"
+                    android:focusable="true"
+                    app:radius="4dp" >
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:alpha="0.9"
+                        android:background="@drawable/img_bg"
+                        >
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/img_bg"
+                            android:src="@drawable/ic_action_bb"
+                            />
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/border_down_shape"
+                        android:gravity="center|left"
+                        android:padding="15px"
+                        android:text="个人白板"
+                        android:textColor="@color/white"
+                        android:textSize="18dp" />
+
+                </svs.meeting.widgets.MetroItemFrameLayout>
+
+                <svs.meeting.widgets.MetroItemFrameLayout
+                    android:id="@+id/view7"
+                    android:layout_width="@dimen/dp104"
+                    android:layout_height="@dimen/dp100"
+                    android:layout_alignBaseline="@+id/view"
+                    android:layout_gravity="top"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_toRightOf="@+id/view12"
+                    android:layout_toEndOf="@+id/view12"
+                    android:layout_alignTop="@+id/view"
+                    android:background="@drawable/border_shape"
+                    android:focusable="true"
+                    app:radius="4dp" >
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:alpha="0.9"
+                        android:background="@drawable/img_bg"
+                        >
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/img_bg"
+                            android:src="@drawable/ic_action_bb"
+                            />
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/border_down_shape"
+                        android:gravity="center|left"
+                        android:padding="15px"
+                        android:text="公共白板"
+                        android:textColor="@color/white"
+                        android:textSize="18dp" />
+
+                </svs.meeting.widgets.MetroItemFrameLayout>
+
+                <svs.meeting.widgets.MetroItemFrameLayout
+                    android:id="@+id/view8"
+                    android:layout_width="@dimen/dp104"
+                    android:layout_height="@dimen/dp100"
+                    android:layout_alignBottom="@+id/view"
+                    android:layout_below="@+id/view7"
+                    android:layout_alignLeft="@+id/view7"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toEndOf="@+id/view7"
+                    android:background="@drawable/border_shape"
+                    android:focusable="true"
+                    app:radius="4dp" >
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:alpha="0.9"
+                        android:background="@drawable/img_bg"
+                        >
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/img_bg"
+                            android:src="@drawable/ic_action_wbsp"
+                            />
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/border_down_shape"
+                        android:gravity="center|left"
+                        android:padding="15px"
+                        android:text="外部视频"
+                        android:textColor="@color/white"
+                        android:textSize="18dp" />
+                </svs.meeting.widgets.MetroItemFrameLayout>
+
+                <!--添加内容-->
+
+                <svs.meeting.widgets.MetroItemFrameLayout
+                    android:id="@+id/view14"
+                    android:layout_width="@dimen/dp104"
+                    android:layout_height="@dimen/dp100"
+                    android:layout_alignBaseline="@+id/view"
+                    android:layout_gravity="top"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_toRightOf="@+id/view7"
+                    android:layout_toEndOf="@+id/view7"
+                    android:layout_alignTop="@+id/view"
+                    android:background="@drawable/border_shape"
+                    android:focusable="true"
+                    app:radius="4dp" >
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:alpha="0.9"
+                        android:background="@drawable/img_bg"
+                        >
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/img_bg"
+                            android:src="@drawable/ic_action_zmxs"
+                            />
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/border_down_shape"
+                        android:gravity="center|left"
+                        android:padding="15px"
+                        android:text="桌面显示"
+                        android:textColor="@color/white"
+                        android:textSize="18dp" />
+
+                </svs.meeting.widgets.MetroItemFrameLayout>
+
+                <svs.meeting.widgets.MetroItemFrameLayout
+                    android:id="@+id/view15"
+                    android:layout_width="@dimen/dp104"
+                    android:layout_height="@dimen/dp100"
+                    android:layout_alignBottom="@+id/view"
+                    android:layout_below="@+id/view14"
+                    android:layout_alignLeft="@+id/view14"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toEndOf="@+id/view14"
+                    android:background="@drawable/border_shape"
+                    android:focusable="true"
+                    app:radius="4dp" >
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:alpha="0.9"
+                        android:background="@drawable/img_bg"
+                        >
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/img_bg"
+                            android:src="@drawable/ic_action_xszm"
+                            />
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/border_down_shape"
+                        android:gravity="center|left"
+                        android:padding="15px"
+                        android:text="显示桌面"
+                        android:textColor="@color/white"
+                        android:textSize="18dp" />
+                </svs.meeting.widgets.MetroItemFrameLayout>
+
+                <!--添加内容1-->
+
+                <svs.meeting.widgets.MetroItemFrameLayout
+                    android:id="@+id/view16"
+                    android:layout_width="@dimen/dp104"
+                    android:layout_height="@dimen/dp100"
+                    android:layout_alignBaseline="@+id/view"
+                    android:layout_gravity="top"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_toRightOf="@+id/view14"
+                    android:layout_toEndOf="@+id/view14"
+                    android:layout_alignTop="@+id/view"
+                    android:background="@drawable/border_shape"
+                    android:focusable="true"
+                    app:radius="4dp" >
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:alpha="0.9"
+                        android:background="@drawable/img_bg"
+                        >
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/img_bg"
+                            android:src="@drawable/ic_action_tcxt"
+                            />
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/border_down_shape"
+                        android:gravity="center|left"
+                        android:padding="15px"
+                        android:text="退出系统"
+                        android:textColor="@color/white"
+                        android:textSize="18dp" />
+
+                </svs.meeting.widgets.MetroItemFrameLayout>
+
+                <svs.meeting.widgets.MetroItemFrameLayout
+                    android:id="@+id/view18"
+                    android:layout_width="@dimen/dp104"
+                    android:layout_height="@dimen/dp100"
+                    android:layout_alignBottom="@+id/view"
+                    android:layout_below="@+id/view16"
+                    android:layout_alignLeft="@+id/view16"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toEndOf="@+id/view16"
+                    android:background="@drawable/border_shape"
+                    android:focusable="true"
+                    app:radius="4dp" >
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:alpha="0.9"
+                        android:background="@drawable/img_bg"
+                        >
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/img_bg"
+                            android:src="@drawable/ic_action_jshy"
+                            />
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/border_down_shape"
+                        android:gravity="center|left"
+                        android:padding="15px"
+                        android:text="结束会议"
+                        android:textColor="@color/white"
+                        android:textSize="18dp" />
+                </svs.meeting.widgets.MetroItemFrameLayout>
+
+            </svs.meeting.widgets.DrawingOrderRelativeLayout>
+        </svs.meeting.widgets.SmoothHorizontalScrollView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:orientation="horizontal"
+        android:id="@+id/bottomPanel"
+        >
+
+    </LinearLayout>
+
+
+</LinearLayout>

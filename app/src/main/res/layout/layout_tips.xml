@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="165dp"
+        android:background="@drawable/dialog_bg"
+        android:orientation="vertical"
+        >
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:text="提示"
+        android:textSize="16sp"
+
+
+        />
+    <TextView
+        android:id="@+id/tv_msg"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center_vertical"
+        android:maxLines="2"
+        android:text="确定退出应用？"
+        android:textSize="16sp"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        >
+        <TextView
+            android:id="@+id/tv_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="32dp"
+            android:padding="4dp"
+            android:text="确定"
+            android:textColor="@color/actionbar_color"
+            android:textSize="16sp"
+            />
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="32dp"
+            android:layout_toLeftOf="@id/tv_ok"
+            android:padding="4dp"
+            android:text="取消"
+            android:textSize="16sp"
+            />
+
+    </RelativeLayout>
+
+</LinearLayout>
+</LinearLayout>
