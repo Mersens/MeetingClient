@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <FrameLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#ffdcdcdc" android:visibility="gone"></LinearLayout>
+    <LinearLayout
+        android:id="@+id/bottomPanel"
+        android:layout_width="fill_parent"
+        android:layout_height="55dp"
+        android:background="#ffffffff"
+        android:gravity="left|center"
+        android:orientation="horizontal"
+        android:paddingBottom="0dp"
+        android:paddingTop="5dp"
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/btn3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/main_btn_bg"
+                android:drawableTop="@drawable/icon_union_e"
+                android:text="联盟"
+                android:textColor="@color/clr_theme_text_selected"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/msg_not_read"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="-35dp"
+                android:layout_marginTop="0dp"
+                android:layout_toRightOf="@+id/btn3"
+                android:background="@drawable/msg_not_read"
+                android:enabled="false"
+                android:gravity="center"
+                android:text="12"
+                android:textColor="#ffffff"
+                android:textSize="11sp"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/btn2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/main_btn_bg"
+            android:drawableTop="@drawable/icon_shop_d"
+            android:enabled="true"
+            android:text="商城"
+            android:textColor="@color/button_text"
+            android:textSize="12sp" />
+
+        <!--消息-->
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/btn_message"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/main_btn_bg"
+                android:drawableTop="@drawable/icon_zqzw_d"
+                android:text="智能合约"
+                android:textColor="@color/button_text"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/btn_message_noread"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="-35dp"
+                android:layout_marginTop="0dp"
+                android:layout_toRightOf="@+id/btn_message"
+                android:background="@drawable/msg_not_read"
+                android:enabled="false"
+                android:gravity="center"
+                android:text="12"
+                android:textColor="#ffffff"
+                android:textSize="11sp"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/btn4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/main_btn_bg"
+            android:drawableTop="@drawable/icon_mine_d"
+            android:enabled="true"
+            android:text="我的"
+            android:textColor="@color/button_text"
+            android:textSize="12sp" />
+    </LinearLayout>
+</LinearLayout>

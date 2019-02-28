@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:fitsSystemWindows="true">
+    <include layout="@layout/layout_actionbar"/>
+    <FrameLayout
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:id="@+id/img_bg"
+            android:layout_gravity="center"
+            />
+        <TextView
+            android:id="@+id/tv_dept"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textColor="@color/white"
+            android:layout_gravity="top|left"
+            tools:text="科大北方软件"
+            android:layout_margin="24dp"
+            android:textSize="24sp"
+            />
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textColor="@color/white"
+            android:layout_gravity="center"
+            tools:text="Mersens"
+            android:textSize="36sp"
+            />
+        <TextView
+            android:id="@+id/tv_role"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textColor="@color/white"
+            android:layout_gravity="bottom|right"
+            tools:text="销售总监"
+            android:layout_margin="24dp"
+            android:textSize="24sp"
+            />
+    </FrameLayout>
+</LinearLayout>

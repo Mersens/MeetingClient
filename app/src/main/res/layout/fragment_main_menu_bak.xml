@@ -1,0 +1,303 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="15dp"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal|center_vertical"
+        android:id="@+id/topPanel">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="此处为会议标题"
+            android:gravity="center"
+            android:id="@+id/txtTitle"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:id="@+id/contentPanel"
+        android:paddingBottom="0dp"
+        android:paddingTop="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        >
+        <GridLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:rowCount="5"
+            android:columnCount="5"
+            android:id="@+id/contentGrid"
+            >
+
+            <!-- 第一行begin-->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_rowSpan="5"
+                >
+                <Button
+                    android:id="@+id/btnHead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="参会信息"
+                    android:textSize="10sp"/>
+            </RelativeLayout>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_columnSpan="2"
+                android:text="签到"
+                android:textSize="10sp"
+                android:layout_column="1"
+                android:layout_row="0"
+                android:layout_columnWeight="1"
+                android:id="@+id/btnSign"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="投票表决"
+                android:textSize="10sp"
+                android:layout_column="3"
+                android:layout_row="0"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="同屏共享"
+                android:textSize="10sp"
+                android:layout_column="4"
+                android:layout_row="0"
+                />
+
+            <!-- 第一行end-->
+
+            <!-- 第二行begin-->
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="2"
+                android:text="暂停会议(01)"
+                android:textSize="10sp"
+                android:layout_column="1"
+                android:layout_row="1"
+                android:layout_columnWeight="1"
+                android:id="@+id/btnPause"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="会议笔记(02)"
+                android:textSize="10sp"
+                android:layout_column="3"
+                android:layout_marginTop="0dp"
+                android:layout_row="1"
+                android:id="@+id/btnNotes"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="即时交流(3)"
+                android:textSize="10sp"
+                android:layout_column="4"
+                android:layout_row="1"
+                android:id="@+id/btnChat"
+                />
+
+            <!-- 第二行end-->
+
+            <!-- 第三行begin-->>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="2"
+                android:text="会议资料"
+                android:textSize="10sp"
+                android:layout_column="1"
+                android:layout_row="2"
+                android:layout_columnWeight="1"
+                android:id="@+id/btnFiles"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="呼叫服务"
+                android:textSize="10sp"
+                android:layout_column="3"
+                android:layout_row="2"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="计算器"
+                android:textSize="10sp"
+                android:layout_column="4"
+                android:layout_row="2"
+                />
+            <!-- 第三行end-->
+
+            <!-- 第四行begin-->
+            <Button
+                android:id="@+id/btnBoard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="2"
+                android:text="个人白板"
+                android:textSize="10sp"
+                android:layout_column="1"
+                android:layout_row="3"
+                android:layout_columnWeight="1"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="公共白板"
+                android:textSize="10sp"
+                android:layout_column="3"
+                android:layout_row="3"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="外部视频"
+                android:textSize="10sp"
+                android:layout_column="4"
+                android:layout_row="3"
+                />
+            <!-- 第四行end-->
+
+
+            <!-- 第五行begin-->
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="桌牌显示"
+                android:textSize="10sp"
+                android:layout_column="1"
+                android:layout_row="4"
+                android:layout_columnWeight="1"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="显示桌面"
+                android:textSize="10sp"
+                android:layout_column="2"
+                android:layout_row="4"
+                />
+
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="退出系统"
+                android:textSize="10sp"
+                android:layout_column="3"
+                android:layout_row="4"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="结束会议"
+                android:textSize="10sp"
+                android:layout_column="4"
+                android:layout_row="4"
+                />
+            <!-- 第五行end-->
+
+            <!--
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:layout_row="2"
+                android:layout_rowSpan="2"
+                android:layout_gravity="fill"
+                android:layout_marginRight="10pt"
+                android:text="1"
+                android:textSize="30sp"
+                />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="2"
+                android:layout_gravity="left"
+                android:text="2"
+                android:textSize="30sp"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3"
+                android:textSize="30sp"
+                />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="2"
+                android:layout_gravity="left"
+                android:text="4"
+                android:textSize="30sp"
+                />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5"
+                android:textSize="30sp"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_row="4"
+                android:layout_columnSpan="2"
+                android:layout_gravity="left"
+                android:text="6"
+                android:textSize="30sp"
+                />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="7"
+                android:textSize="30sp"
+                />
+            -->
+        </GridLayout>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:orientation="horizontal"
+        android:id="@+id/bottomPanel"
+        >
+
+    </LinearLayout>
+
+
+</LinearLayout>

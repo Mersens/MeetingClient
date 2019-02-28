@@ -1,0 +1,29 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <fragment
+        android:id="@+id/header"
+        android:name="svs.meeting.widgets.CommonHeader"
+        android:layout_width="match_parent"
+        android:layout_height="155dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/clr_theme_zqzw_spliter"
+        android:orientation="horizontal"></LinearLayout>
+
+    <TextView
+        android:id="@+id/txt_bzz"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="SecondFragment"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp14" />
+
+</LinearLayout>
