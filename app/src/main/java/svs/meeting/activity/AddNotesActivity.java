@@ -35,8 +35,6 @@ public class AddNotesActivity extends BaseActivity {
     private LinedEditText mEditContent;
     private EditText mEditNoteTitle;
 
-
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
