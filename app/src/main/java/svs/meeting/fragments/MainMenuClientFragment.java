@@ -17,6 +17,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +38,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -54,9 +56,11 @@ import svs.meeting.activity.ShowDesktopActivity;
 import svs.meeting.activity.SignInShowActivity;
 import svs.meeting.activity.StartVoteBallotActivity;
 import svs.meeting.activity.VoteBallotActivity;
+import svs.meeting.activity.VoteBallotDetailActivity;
 import svs.meeting.app.BuildConfig;
 import svs.meeting.app.FilesActivity;
 import svs.meeting.app.LivePlayerDemoActivity;
+import svs.meeting.app.MainActivity;
 import svs.meeting.app.MyApplication;
 import svs.meeting.app.R;
 import svs.meeting.app.VoteBallotEntity;
@@ -67,6 +71,9 @@ import svs.meeting.data.MsgType;
 import svs.meeting.service.FloatMenuService;
 import svs.meeting.service.MqttManagerV3;
 import svs.meeting.util.Helper;
+import svs.meeting.util.NotificationUtils;
+import svs.meeting.util.RequestManager;
+import svs.meeting.util.ResultObserver;
 import svs.meeting.util.RxBus;
 import svs.meeting.util.XLog;
 import svs.meeting.widgets.DrawingOrderRelativeLayout;
@@ -226,6 +233,28 @@ public class MainMenuClientFragment extends Fragment implements View.OnClickList
                                         bundle.putSerializable("voteballot",entity1);
                                         Helper.switchActivity(getActivity(), StartVoteBallotActivity.class,bundle);
                                     }
+                                }else if(MsgType.MSG_RESPONSE.equals(msg)){
+                                    String str=entity.getContent();
+                                    JSONObject object=new JSONObject(str);
+                                    String t=object.getString("type");
+                                    String title=null;
+                                    if("shareScreen_agree".equals(t)){
+                                        title="同屏共享已同意！";
+                                        onPushScreen();
+                                    }else if("shareScreen_refuse".equals(t)){
+                                        title="同屏共享被拒绝！";
+                                    }else if("speaker_agree".equals(t)){
+                                        title="申请发言已同意！";
+                                    }else if("speaker_refuse".equals(t)){
+                                        title="申请发言被拒绝！";
+                                    }else if("leave_agree".equals(t)){
+                                        title="申请离开已同意！";
+                                        doLeave();
+                                    }else if("leave_refuse".equals(t)){
+                                        title="申请离开被拒绝！";
+                                    }
+                                    NotificationUtils notificationUtils = new NotificationUtils(getActivity(), null);
+                                    notificationUtils.sendNotification(title, title);
                                 }
                             }
                         }
@@ -235,10 +264,56 @@ public class MainMenuClientFragment extends Fragment implements View.OnClickList
         mCompositeDisposable.add(d);
     }
 
+    private void doLeave(){
+        try {
+            String seat_no = Config.clientInfo.getString("tid");
+            String id = Config.meetingInfo.getString("id");
+            String ql="update logins set login_type='02' where seat_no='"+seat_no+"' and meeting_id="+id;
+            Map<String, String> map = Config.getParameters();
+            map.put("type", "hql");
+            map.put("ql", ql);
+            RequestManager.getInstance()
+                    .mServiceStore
+                    .setMeetingStatu(map)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new ResultObserver(new RequestManager.onRequestCallBack() {
+                        @Override
+                        public void onSuccess(String msg) {
+                            Log.e("onSuccess", msg);
+                            if(!TextUtils.isEmpty(msg)){
+                                try {
+                                    JSONObject json=new JSONObject(msg);
+                                    if(json.getBoolean("success")){
+                                        String split = "\\~^";
+                                        MqttManagerV3 mqtt = MqttManagerV3.getInstance();
+                                        JSONObject object = new JSONObject();
+                                        object.put("action","leave");
+                                        String message=object.toString();
+                                        String seat_no = Config.clientInfo.getString("tid");
+                                        String uname = Config.clientInfo.getString("name");
+                                        String strMsg=uname+split+seat_no+split+MsgType.MSG_LOGIN+split +message+split+new Date().getTime()+split+Config.CLIENT_IP;
+                                        mqtt.send(strMsg,"");
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                        @Override
+                        public void onError(String msg) {
+                            Log.e("sendVoteInfo onError", msg);
+                        }
+                    }));
 
 
 
 
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
 
 
     private void initViews(View view) {
@@ -365,10 +440,9 @@ public class MainMenuClientFragment extends Fragment implements View.OnClickList
             @Override
             public void onClickOk() {
                 dialogFragment.dismissAllowingStateLoss();
-
+                sendInfo("speaker");
             }
         });
-
     }
 
     private void showFKTipsView(final String msg){
@@ -384,7 +458,7 @@ public class MainMenuClientFragment extends Fragment implements View.OnClickList
             @Override
             public void onClickOk() {
                 dialogFragment.dismissAllowingStateLoss();
-
+                sendInfo("leave");
             }
         });
 
@@ -403,18 +477,18 @@ public class MainMenuClientFragment extends Fragment implements View.OnClickList
             public void onClickOk() {
                 dialogFragment.dismissAllowingStateLoss();
                 //申请同屏
-                sendInfo();
+                sendInfo("shareScreen");
             }
         });
 
     }
 
-    private void sendInfo(){
+    private void sendInfo(String type){
         try {
             String split = "\\~^";
             MqttManagerV3 mqtt = MqttManagerV3.getInstance();
             JSONObject object = new JSONObject();
-            object.put("type","shareScreen");
+            object.put("type",type);
             String message=object.toString();
             String seat_no = Config.clientInfo.getString("tid");
             String uname = Config.clientInfo.getString("name");
@@ -440,8 +514,6 @@ public class MainMenuClientFragment extends Fragment implements View.OnClickList
                 dialogFragment.dismissAllowingStateLoss();
             }
         });
-
-
     }
 
     @Override
@@ -453,10 +525,9 @@ public class MainMenuClientFragment extends Fragment implements View.OnClickList
     private void showContent(){
         Log.e("showContent","showContent=="+type);
         switch (type){
-
             case IntentType.TPGX:
                 if(!isPushScreen){
-                    showShareScreenView("确定启动屏幕共享？");
+                    showTPTipsView("确定向主持人申请同屏？");
                 }
                 break;
             case IntentType.WBSP:

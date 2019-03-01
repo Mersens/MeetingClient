@@ -79,6 +79,12 @@
             android:theme="@style/AppTheme.NoActionBar"
             />
         <activity
+            android:name="svs.meeting.activity.DisplayActivity"
+            android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/ThemeSplash"
+            />
+        <activity
             android:name="svs.meeting.activity.SignInShowActivity"
             android:screenOrientation="landscape"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -86,6 +92,12 @@
             />
         <activity
             android:name="svs.meeting.activity.SignInActivity"
+            android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity
+            android:name="svs.meeting.activity.NotificationActivity"
             android:screenOrientation="landscape"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar"

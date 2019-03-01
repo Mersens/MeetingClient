@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import svs.meeting.activity.DisplayActivity;
 import svs.meeting.activity.ServiceActivity;
 import svs.meeting.activity.ShowDesktopActivity;
 import svs.meeting.activity.SignInActivity;
@@ -147,12 +148,13 @@ public class SplashActivity extends Activity {
 						Helper.switchActivity(SplashActivity.this,ServiceActivity.class);
 						SplashActivity.this.finish();
 						return;
+					}else if("04".equals(dev_type)){
+						Helper.switchActivity(SplashActivity.this,DisplayActivity.class);
+						SplashActivity.this.finish();
 					}else {
 						Helper.switchActivity(SplashActivity.this, MainActivity.class);
 						finish();
 					}
-
-
 
                 }catch(Exception ex){
 					ex.printStackTrace();

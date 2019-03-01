@@ -269,7 +269,7 @@ public class MqttManagerV3 implements INetManager {
             String strs[] =strmsg.split("\\\\~\\^" );
             String msgType=strs[2];
             String content=strs[3];
-            if(MsgType.MSG_CHAT.equals(msgType) || MsgType.MSG_SERVICE.equals(msgType)){
+            if(MsgType.MSG_CHAT.equals(msgType) || MsgType.MSG_SERVICE.equals(msgType) || MsgType.MSG_REQUEST.equals(msgType)){
                 String uname=strs[0];
                 String seat_no=strs[1];
                 String time=strs[4];

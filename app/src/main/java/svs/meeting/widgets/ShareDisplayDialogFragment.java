@@ -19,15 +19,14 @@ import svs.meeting.app.R;
  * Created by Administrator on 2018/3/22.
  */
 
-public class TipsDialogFragment extends DialogFragment {
-
+public class ShareDisplayDialogFragment extends DialogFragment {
     private TextView mTextOk;
     private TextView mTextCancel;
     private TextView mTextMsg;
     private OnDialogClickListener listener;
 
-    public static TipsDialogFragment getInstance(String msg){
-        TipsDialogFragment fragment=new TipsDialogFragment();
+    public static ShareDisplayDialogFragment getInstance(String msg){
+        ShareDisplayDialogFragment fragment=new ShareDisplayDialogFragment();
         Bundle bundle=new Bundle();
         bundle.putString("msg",msg);
         fragment.setArguments(bundle);
@@ -40,7 +39,7 @@ public class TipsDialogFragment extends DialogFragment {
                              @Nullable Bundle savedInstanceState) {
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         getDialog().setCanceledOnTouchOutside(false);
-        return inflater.inflate(R.layout.layout_tips,container,true);
+        return inflater.inflate(R.layout.layout_share_display,container,true);
     }
 
     @Override
@@ -78,13 +77,6 @@ public class TipsDialogFragment extends DialogFragment {
         });
     }
 
-    public void setCancelText(String str){
-        mTextCancel.setText(str);
-    }
-    public void setOkText(String str){
-        mTextOk.setText(str);
-    }
-
     @Override
     public void show(FragmentManager manager, String tag) {
         FragmentTransaction ft = manager.beginTransaction();
@@ -98,7 +90,6 @@ public class TipsDialogFragment extends DialogFragment {
     public interface OnDialogClickListener {
         void onClickCancel();
         void onClickOk();
-
     }
 
 }

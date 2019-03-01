@@ -587,7 +587,6 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-
     }
     private void showPublicPaletteView(String msg){
         final TipsDialogFragment dialogFragment=TipsDialogFragment.getInstance(msg);
@@ -605,7 +604,6 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
 
             }
         });
-
     }
 
     private void showFinishView(String msg){

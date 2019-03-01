@@ -43,6 +43,7 @@ import java.util.concurrent.TimeUnit;
 import svs.meeting.activity.BaseActivity;
 import svs.meeting.activity.CallServiceActivity;
 import svs.meeting.activity.ChatActivity;
+import svs.meeting.activity.NotificationActivity;
 import svs.meeting.activity.PublicPaletteActivity;
 import svs.meeting.activity.ServiceActivity;
 import svs.meeting.activity.ShowDesktopActivity;
@@ -176,7 +177,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         registerReceiver(myReceiver, intentFilter);
         MessageProcessor.getInstance().updateChatlogs();
         //Glide.with(activity).load(splash).into(startImage);
-
         /*
         new Handler().postDelayed(new Runnable() {
             public void run() {
@@ -237,7 +237,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                     } else if (MsgType.MSG_CHAT.equals(mqEntity.getMsgType())) {
                                         entity.setMsg_type(MsgType.MSG_CHAT);
                                     }
-
                                     entity.setMsg(str);
                                     entity.setTopic(mqEntity.getTopic());
                                     entity.setFrom_name(uname);
@@ -270,7 +269,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                         NotificationUtils notificationUtils = new NotificationUtils(MainActivity.this, pendingIntent);
                                         notificationUtils.sendNotification("通知消息", uname);
                                     }
-
                                 }else if(MsgType.MSG_LOGIN.equals(mqEntity.getMsgType())){
                                     String str=mqEntity.getContent();
                                     Log.e("MSG_LOGIN","MSG_LOGIN=="+str);
@@ -286,8 +284,41 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                             Bundle bundle=new Bundle();
                                             bundle.putInt("type",1);
                                             Helper.switchActivity(MainActivity.this, VoteBallotDetailActivity.class,bundle);
+                                        }else if("leave".equals(action)){
+                                            //退出应用
+                                            MyApplication.getInstance().exit();
+
                                         }
                                     }
+                                }if(MsgType.MSG_REQUEST.equals(mqEntity.getMsgType())){
+                                    String str=mqEntity.getContent();
+                                    String strs[] = str.split(";");
+                                    JSONObject object=new JSONObject(strs[0]);
+                                    String t=object.getString("type");
+                                    String title=null;
+                                    String msg=null;
+                                    int dex=0;
+                                    String uname = strs[1];
+                                    if("shareScreen".equals(t)){
+                                        title="同屏共享";
+                                        msg=uname+"申请同屏共享";
+                                        dex=1;
+                                    }else if("speaker".equals(t)){
+                                        title="申请发言";
+                                        msg=uname+"申请发言";
+                                        dex=2;
+                                    }else if("leave".equals(t)){
+                                        title="申请离开";
+                                        msg=uname+"申请离开";
+                                        dex=3;
+                                    }
+                                    Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
+                                    intent.putExtra("name",uname);
+                                    intent.putExtra("type",dex);
+                                    PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, -1, intent
+                                            , PendingIntent.FLAG_UPDATE_CURRENT);
+                                    NotificationUtils notificationUtils = new NotificationUtils(MainActivity.this, pendingIntent);
+                                    notificationUtils.sendNotification(title, msg);
                                 }
                             }
                         }
