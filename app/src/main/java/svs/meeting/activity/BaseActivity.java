@@ -28,7 +28,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     StatusBarHelper.translucent(this,getResources().getColor(R.color.actionbar_color));
 
-
   }
 
 

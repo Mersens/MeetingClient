@@ -280,6 +280,12 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
             String strFont = Config.meetingInfo.getString("font");
             int fontSize = Config.meetingInfo.getInt("size");
             txtTitle.setTextSize(Helper.Px2Dp(this.getContext(), fontSize));
+            String color=Config.meetingInfo.getString("color");
+            if(!TextUtils.isEmpty(color)){
+                if(!"null".equals(color)){
+                    txtTitle.setTextColor(Color.parseColor("#"+color));
+                }
+            }
             //txtTitle.setTextColor(Color.parseColor("#"+Config.meetingInfo.getString("color")));
             String color=Config.meetingInfo.getString("color");
             if(!TextUtils.isEmpty(color)){
