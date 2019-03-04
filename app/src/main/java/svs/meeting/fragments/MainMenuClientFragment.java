@@ -339,7 +339,9 @@ public class MainMenuClientFragment extends Fragment implements View.OnClickList
             txtTitle.setTextSize(Helper.Px2Dp(this.getContext(), fontSize));
             String color=Config.meetingInfo.getString("color");
             if(!TextUtils.isEmpty(color)){
-                txtTitle.setTextColor(Color.parseColor("#"+color));
+                if(!"null".equals(color)){
+                    txtTitle.setTextColor(Color.parseColor("#"+color));
+                }
             }
             //txtTitle.setTextColor(Color.parseColor("#"+Config.meetingInfo.getString("color")));
 
