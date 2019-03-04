@@ -85,14 +85,14 @@ public class FloatMenuService extends Service {
 
 			@Override
 			public void dragingLogoViewOffset(final View smallView, boolean isDraging, boolean isResetPosition, float offset) {
-				if (isDraging && offset > 0) {
+				/*if (isDraging && offset > 0) {
 					smallView.setScaleX(1 + offset);
 					smallView.setScaleY(1 + offset);
 				} else {
 					smallView.setTranslationX(0);
 					smallView.setScaleX(1);
 					smallView.setScaleY(1);
-				}
+				}*/
 
 			}
 

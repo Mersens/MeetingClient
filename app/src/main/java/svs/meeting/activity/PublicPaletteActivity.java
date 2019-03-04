@@ -20,6 +20,10 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.yinghe.whiteboardlib.bean.PointEntity;
@@ -56,18 +60,21 @@ import svs.meeting.data.PaletteEntity;
 import svs.meeting.util.PaletteUtils;
 import svs.meeting.util.RequestManager;
 import svs.meeting.util.ResultObserver;
-import svs.meeting.widgets.LoadingDialogFragment;
+
 
 public class PublicPaletteActivity extends BaseActivity implements WhiteBoardFragment.SendBtnCallback, WhiteBoardFragment.OnPageSelectListener {
     private Toolbar mToolbar;
     private String path;
     private int count;
-    private int curPage;
+    private int curPage=1;
     private String name;
     private String file_id = "aaa";
     private WhiteBoardFragment whiteBoardFragment;
-    LoadingDialogFragment loadingDialogFragment = LoadingDialogFragment.getInstance();
-
+    private ImageView mImgUp;
+    private ImageView mImgNext;
+    private TextView mTextCurPage;
+    private TextView mTextCount;
+    private FrameLayout layout_page;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -253,7 +260,6 @@ public class PublicPaletteActivity extends BaseActivity implements WhiteBoardFra
                             int startY=p1.getInt("y");
                             int endX=p2.getInt("x");
                             int endY=p2.getInt("y");
-
                             StrokeRecord record = new StrokeRecord(StrokeRecord.STROKE_TYPE_CIRCLE);
                             RectF rect = new RectF(startX, startY, startX, startY);
                             record.rect = rect;
@@ -343,10 +349,8 @@ public class PublicPaletteActivity extends BaseActivity implements WhiteBoardFra
                                 if (json.getBoolean("success")) {
                                     path = json.getString("path");
                                     count = json.getInt("count");
-                                    curPage = 1;
                                     if (!TextUtils.isEmpty(path) && count > 0) {
                                         name = "p_" + curPage + ".png";
-                                        loadingDialogFragment.show(getSupportFragmentManager(), "analysisSketchData");
                                         new BitmapThread(Config.WEB_URL + path + "/" + name, name).start();
                                         getSaveData();
                                     }
@@ -369,6 +373,25 @@ public class PublicPaletteActivity extends BaseActivity implements WhiteBoardFra
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+        layout_page=mToolbar.findViewById(R.id.layout_page);
+        layout_page.setVisibility(View.VISIBLE);
+        mImgUp=mToolbar.findViewById(R.id.img_up);
+        mImgNext=mToolbar.findViewById(R.id.img_next);
+
+        mImgUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onPageUp();
+            }
+        });
+        mImgNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onPageNext();
+            }
+        });
+        mTextCurPage=mToolbar.findViewById(R.id.tv_num);
+        mTextCount=mToolbar.findViewById(R.id.tv_count);
     }
 
     @Override
@@ -395,9 +418,7 @@ public class PublicPaletteActivity extends BaseActivity implements WhiteBoardFra
         }
         curPage = curPage - 1;
         name = "p_" + curPage + ".png";
-        loadingDialogFragment.show(getSupportFragmentManager(), "analysisSketchData");
-        new BitmapThread(Config.WEB_URL + path + "/" + name, name).start();
-
+        getPaletteBgInfo();
     }
 
     @Override
@@ -408,9 +429,7 @@ public class PublicPaletteActivity extends BaseActivity implements WhiteBoardFra
         }
         curPage = curPage + 1;
         name = "p_" + curPage + ".png";
-        loadingDialogFragment.show(getSupportFragmentManager(), "analysisSketchData");
-        new BitmapThread(Config.WEB_URL + path + "/" + name, name).start();
-
+        getPaletteBgInfo();
     }
 
     class BitmapThread extends Thread {
@@ -439,14 +458,12 @@ public class PublicPaletteActivity extends BaseActivity implements WhiteBoardFra
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            loadingDialogFragment.dismissAllowingStateLoss();
                         }
                     });
                 } else {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            loadingDialogFragment.dismissAllowingStateLoss();
                         }
                     });
                 }
@@ -462,6 +479,8 @@ public class PublicPaletteActivity extends BaseActivity implements WhiteBoardFra
                                     Log.e("whiteBoardFragment", "Config.STOREPATH+key==" + Config.STOREPATH + key);
                                     whiteBoardFragment.setCurBackgroundByPath(Config.STOREPATH + key);
                                     whiteBoardFragment.setPageData(curPage, count);
+                                    mTextCurPage.setText(curPage+"");
+                                    mTextCount.setText(count+"");
                                 }
                             });
                         }
@@ -513,7 +532,6 @@ public class PublicPaletteActivity extends BaseActivity implements WhiteBoardFra
     }
 
     private void analysisSketchData(SketchData data, Bitmap bitmap) {
-        loadingDialogFragment.show(getSupportFragmentManager(), "analysisSketchData");
         JSONArray array = new JSONArray();
         if (data != null) {
             for (int i = 0; i < data.strokeRecordList.size(); i++) {
@@ -713,7 +731,6 @@ public class PublicPaletteActivity extends BaseActivity implements WhiteBoardFra
                             if (!TextUtils.isEmpty(msg)) {
                                 try {
                                     JSONObject json = new JSONObject(msg);
-                                    loadingDialogFragment.dismissAllowingStateLoss();
                                     if (json.getBoolean("success")) {
                                         Toast.makeText(PublicPaletteActivity.this,
                                                 "保存成功！", Toast.LENGTH_SHORT).show();
@@ -729,13 +746,11 @@ public class PublicPaletteActivity extends BaseActivity implements WhiteBoardFra
 
                         @Override
                         public void onError(String msg) {
-                            loadingDialogFragment.dismissAllowingStateLoss();
                             Log.e("saveDoc", msg);
                         }
                     }));
         } catch (JSONException e) {
             e.printStackTrace();
-            loadingDialogFragment.dismissAllowingStateLoss();
         }
     }
 

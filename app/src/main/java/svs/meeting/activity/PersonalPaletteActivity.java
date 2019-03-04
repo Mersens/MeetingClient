@@ -17,6 +17,10 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.yinghe.whiteboardlib.bean.PointEntity;
@@ -51,18 +55,21 @@ import svs.meeting.data.PaletteEntity;
 import svs.meeting.util.PaletteUtils;
 import svs.meeting.util.RequestManager;
 import svs.meeting.util.ResultObserver;
-import svs.meeting.widgets.LoadingDialogFragment;
 
 public class PersonalPaletteActivity extends BaseActivity implements WhiteBoardFragment.SendBtnCallback ,WhiteBoardFragment.OnPageSelectListener{
     private Toolbar mToolbar;
     private String path;
     private int count;
     private String name;
-    private int curPage;
+    private int curPage=1;
     private String file_id = "aaa";
     private int type=0;//0表示点击进入，1表示从会议资料进入
     private WhiteBoardFragment whiteBoardFragment;
-    LoadingDialogFragment loadingDialogFragment=LoadingDialogFragment.getInstance();
+    private ImageView mImgUp;
+    private ImageView mImgNext;
+    private TextView mTextCurPage;
+    private TextView mTextCount;
+    private FrameLayout layout_page;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +77,7 @@ public class PersonalPaletteActivity extends BaseActivity implements WhiteBoardF
         init();
     }
     private void init() {
+
         whiteBoardFragment=WhiteBoardFragment.newInstance(this);
         FragmentTransaction ts = getSupportFragmentManager().beginTransaction();
         ts.add(R.id.frame_content, whiteBoardFragment, "wb").commitAllowingStateLoss();
@@ -96,7 +104,6 @@ public class PersonalPaletteActivity extends BaseActivity implements WhiteBoardF
             if(intent.hasExtra("name")){
                 name=intent.getStringExtra("name");
             }
-            loadingDialogFragment.show(getSupportFragmentManager(),"analysisSketchData");
             new BitmapThread(Config.WEB_URL+"/"+path,name).start();
             try {
                 String seat_no = Config.clientInfo.getString("tid");
@@ -136,16 +143,13 @@ public class PersonalPaletteActivity extends BaseActivity implements WhiteBoardF
                                 if(json.getBoolean("success")){
                                     path=json.getString("path");
                                     count=json.getInt("count");
-                                    curPage=1;
                                     if(!TextUtils.isEmpty(path) && count>0){
-                                        name="p_"+curPage+".png";
-                                        loadingDialogFragment.show(getSupportFragmentManager(),"analysisSketchData");
-                                        new BitmapThread(Config.WEB_URL+path+"/"+name,name).start();
                                         try {
+                                            name = "p_" + curPage + ".png";
+                                            new BitmapThread(Config.WEB_URL+path+"/"+name,name).start();
                                             String seat_no = Config.clientInfo.getString("tid");
                                             String sql = "select * from documents where page='" + curPage  + "' and uid='" + seat_no + "'";                                            getSaveData(sql);
                                             getSaveData(sql);
-
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
@@ -169,6 +173,25 @@ public class PersonalPaletteActivity extends BaseActivity implements WhiteBoardF
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+        layout_page=mToolbar.findViewById(R.id.layout_page);
+        layout_page.setVisibility(View.VISIBLE);
+        mImgUp=mToolbar.findViewById(R.id.img_up);
+        mImgNext=mToolbar.findViewById(R.id.img_next);
+
+        mImgUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onPageUp();
+            }
+        });
+        mImgNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onPageNext();
+            }
+        });
+        mTextCurPage=mToolbar.findViewById(R.id.tv_num);
+        mTextCount=mToolbar.findViewById(R.id.tv_count);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -412,9 +435,7 @@ public class PersonalPaletteActivity extends BaseActivity implements WhiteBoardF
         }
         curPage=curPage-1;
         name="p_"+curPage+".png";
-        loadingDialogFragment.show(getSupportFragmentManager(),"analysisSketchData");
-        new BitmapThread(Config.WEB_URL+path+"/"+name,name).start();
-
+        getPaletteBgInfo();
     }
 
     @Override
@@ -425,8 +446,7 @@ public class PersonalPaletteActivity extends BaseActivity implements WhiteBoardF
         }
         curPage=curPage+1;
         name="p_"+curPage+".png";
-        loadingDialogFragment.show(getSupportFragmentManager(),"analysisSketchData");
-        new BitmapThread(Config.WEB_URL+path+"/"+name,name).start();
+        getPaletteBgInfo();
 
     }
 
@@ -455,14 +475,12 @@ public class PersonalPaletteActivity extends BaseActivity implements WhiteBoardF
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            loadingDialogFragment.dismissAllowingStateLoss();
                         }
                     });
                 }else {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            loadingDialogFragment.dismissAllowingStateLoss();
                         }
                     });
                 }
@@ -477,7 +495,9 @@ public class PersonalPaletteActivity extends BaseActivity implements WhiteBoardF
                                 public void run() {
                                     Log.e("whiteBoardFragment","Config.STOREPATH+key=="+Config.STOREPATH+key);
                                     whiteBoardFragment.setCurBackgroundByPath(Config.STOREPATH+key);
-                                    whiteBoardFragment.setPageData(curPage,count);
+                                    //whiteBoardFragment.setPageData(curPage,count);
+                                    mTextCurPage.setText(curPage+"");
+                                    mTextCount.setText(count+"");
                                 }
                             });
                         }
@@ -530,7 +550,6 @@ public class PersonalPaletteActivity extends BaseActivity implements WhiteBoardF
     }
 
     private void analysisSketchData(SketchData data, Bitmap bitmap) {
-        loadingDialogFragment.show(getSupportFragmentManager(), "analysisSketchData");
         JSONArray array = new JSONArray();
         if (data != null) {
             for (int i = 0; i < data.strokeRecordList.size(); i++) {
@@ -730,7 +749,6 @@ public class PersonalPaletteActivity extends BaseActivity implements WhiteBoardF
                             if (!TextUtils.isEmpty(msg)) {
                                 try {
                                     JSONObject json = new JSONObject(msg);
-                                    loadingDialogFragment.dismissAllowingStateLoss();
                                     if (json.getBoolean("success")) {
                                         Toast.makeText(PersonalPaletteActivity.this,
                                                 "保存成功！", Toast.LENGTH_SHORT).show();
@@ -746,13 +764,11 @@ public class PersonalPaletteActivity extends BaseActivity implements WhiteBoardF
 
                         @Override
                         public void onError(String msg) {
-                            loadingDialogFragment.dismissAllowingStateLoss();
                             Log.e("saveDoc", msg);
                         }
                     }));
         } catch (JSONException e) {
             e.printStackTrace();
-            loadingDialogFragment.dismissAllowingStateLoss();
         }
     }
 

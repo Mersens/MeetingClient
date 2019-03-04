@@ -277,8 +277,13 @@ public  class FloatManager {
             //判断状态栏是否显示 如果不显示则statusBarHeight为0
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 if (Build.VERSION.SDK_INT > 23) {
-                    //在android7.1以上系统需要使用TYPE_PHONE类型 配合运行时权限
-                    wmParams.type = WindowManager.LayoutParams.TYPE_PHONE;
+                    if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
+                        wmParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+                    }else {
+                        //在android7.1以上系统需要使用TYPE_PHONE类型 配合运行时权限
+                        wmParams.type = WindowManager.LayoutParams.TYPE_PHONE;
+                    }
+
                 } else {
                     wmParams.type = WindowManager.LayoutParams.TYPE_TOAST;
                 }

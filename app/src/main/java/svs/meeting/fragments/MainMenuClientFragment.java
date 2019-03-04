@@ -195,7 +195,7 @@ public class MainMenuClientFragment extends Fragment implements View.OnClickList
                             }else if(type.equals(EventEntity.MQTT_MSG)){
                                 EventEntity.MQEntity entity=e.getMqEntity();
                                 String msg=entity.getMsgType();
-                                if(MsgType.MSG_SHARE.equals(msg)){
+          /*                      if(MsgType.MSG_SHARE.equals(msg)){
                                     String str=entity.getContent();
                                     if(str.contains(",")){
                                         String strs[]=str.split(",");
@@ -208,7 +208,7 @@ public class MainMenuClientFragment extends Fragment implements View.OnClickList
                                             Helper.switchActivity(getActivity(), LivePlayerDemoActivity.class,bundle);
                                         }
                                     }
-                                }else if(MsgType.MSG_VOTE.equals(msg)){
+                                }*/ if(MsgType.MSG_VOTE.equals(msg)){
                                     String content=entity.getContent();
                                     JSONObject jsonObject=new JSONObject(content);
                                     String action=jsonObject.getString("action");
@@ -481,9 +481,7 @@ public class MainMenuClientFragment extends Fragment implements View.OnClickList
                 sendInfo("shareScreen");
             }
         });
-
     }
-
     private void sendInfo(String type){
         try {
             String split = "\\~^";
