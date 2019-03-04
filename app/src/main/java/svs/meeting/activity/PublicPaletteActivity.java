@@ -685,7 +685,7 @@ public class PublicPaletteActivity extends BaseActivity implements WhiteBoardFra
             params.put("end_filter", "on_upload_image");
             params.put("rawImage", bitmapBuffer);
             JSONObject map = new JSONObject();
-            map.put("file_id", "aaa");
+            map.put("file_id", getUUID());
             map.put("meeting_id", id);
             map.put("meeting_name", meeting_name);
             map.put("uid", seat_no);
