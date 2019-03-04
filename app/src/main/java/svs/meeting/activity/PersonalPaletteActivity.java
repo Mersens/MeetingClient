@@ -118,10 +118,8 @@ public class PersonalPaletteActivity extends BaseActivity implements WhiteBoardF
                 Log.e("onSendBtnClick","onSendBtnClick="+filePath.getAbsolutePath());
             }
         });
-
     }
     private void getPaletteBgInfo() {
-        loadingDialogFragment.show(getSupportFragmentManager(),"analysisSketchData");
         Map<String, String> map = Config.getParameters();
         RequestManager.getInstance()
                 .mServiceStore
@@ -141,10 +139,11 @@ public class PersonalPaletteActivity extends BaseActivity implements WhiteBoardF
                                     curPage=1;
                                     if(!TextUtils.isEmpty(path) && count>0){
                                         name="p_"+curPage+".png";
+                                        loadingDialogFragment.show(getSupportFragmentManager(),"analysisSketchData");
                                         new BitmapThread(Config.WEB_URL+path+"/"+name,name).start();
                                         try {
                                             String seat_no = Config.clientInfo.getString("tid");
-                                            String sql = "select * from documents where file_id='" + file_id + "' and page='" + curPage + "' and uid='" + seat_no + "'";                                            getSaveData(sql);
+                                            String sql = "select * from documents where page='" + curPage  + "' and uid='" + seat_no + "'";                                            getSaveData(sql);
                                             getSaveData(sql);
 
                                         } catch (JSONException e) {
@@ -703,7 +702,7 @@ public class PersonalPaletteActivity extends BaseActivity implements WhiteBoardF
             params.put("end_filter", "on_upload_image");
             params.put("rawImage", bitmapBuffer);
             JSONObject map = new JSONObject();
-            map.put("file_id", "aaa");
+            map.put("file_id", getUUID());
             map.put("meeting_id", id);
             map.put("meeting_name", meeting_name);
             map.put("uid", seat_no);

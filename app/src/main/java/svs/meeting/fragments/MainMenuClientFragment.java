@@ -571,10 +571,8 @@ public class MainMenuClientFragment extends Fragment implements View.OnClickList
             new AlertDialog.Builder(getActivity()).setMessage("推送屏幕需要安卓5.0以上,您当前系统版本过低,不支持该功能。").setTitle("抱歉").show();
             return;
         }
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(getActivity())) {
-
                 new AlertDialog.Builder(getActivity()).setMessage("推送屏幕需要APP出现在顶部.是否确定?").setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -587,7 +585,6 @@ public class MainMenuClientFragment extends Fragment implements View.OnClickList
             }
         }
 
-
         if (RecordService.mEasyPusher != null) {
             Intent intent = new Intent(getActivity(), RecordService.class);
             getActivity().stopService(intent);
@@ -595,8 +592,6 @@ public class MainMenuClientFragment extends Fragment implements View.OnClickList
         } else {
             startScreenPushIntent();
         }
-
-
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
