@@ -94,7 +94,7 @@ public class PublicPaletteActivity extends BaseActivity implements WhiteBoardFra
     private void getSaveData() {
         try {
             String seat_no = Config.clientInfo.getString("tid");
-            String sql = "select * from documents where file_id='" + file_id + "' and page='" + curPage + "' and uid='" + seat_no + "'";
+            String sql = "select * from documents where page='" + curPage  + "' and uid='" + seat_no + "'";
             Log.e("sql", "sql==" + sql);
             Map<String, String> map = Config.getParameters();
             map.put("type", "hql");
@@ -327,7 +327,6 @@ public class PublicPaletteActivity extends BaseActivity implements WhiteBoardFra
     }
 
     private void getPaletteBgInfo() {
-        loadingDialogFragment.show(getSupportFragmentManager(), "analysisSketchData");
         Map<String, String> map = Config.getParameters();
         RequestManager.getInstance()
                 .mServiceStore
@@ -347,6 +346,7 @@ public class PublicPaletteActivity extends BaseActivity implements WhiteBoardFra
                                     curPage = 1;
                                     if (!TextUtils.isEmpty(path) && count > 0) {
                                         name = "p_" + curPage + ".png";
+                                        loadingDialogFragment.show(getSupportFragmentManager(), "analysisSketchData");
                                         new BitmapThread(Config.WEB_URL + path + "/" + name, name).start();
                                         getSaveData();
                                     }

@@ -47,11 +47,11 @@ public class MetroItemFrameLayout extends FrameLayout implements IMetroItemRound
     private void init(Context context, AttributeSet attrs, int defStyle) {
         mMetroItemRound = new MetroItemRound(this, context, attrs, defStyle);
         setWillNotDraw(false);
-
     }
 
     @Override
     public void draw(Canvas canvas) {
+        super.draw(canvas);
         mMetroItemRound.draw(canvas);
     }
 
