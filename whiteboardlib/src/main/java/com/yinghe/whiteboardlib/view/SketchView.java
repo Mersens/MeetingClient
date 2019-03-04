@@ -292,7 +292,7 @@ public class SketchView extends View implements OnTouchListener {
 //            canvas.drawBitmap(curSketchData.backgroundBM, backgroundSrcRect, backgroundDstRect, null);
             curSketchData.backgroundBM=setImgSize(curSketchData.backgroundBM,canvas.getWidth(),canvas.getHeight());
             Matrix matrix = new Matrix();
-            matrix.postTranslate(canvas.getWidth() / 2 - curSketchData.backgroundBM.getWidth() / 2, ((canvas.getHeight()-ScreenUtils.dip2px(mContext, 48)) / 2 - curSketchData.backgroundBM.getHeight() / 2));
+            matrix.postTranslate(canvas.getWidth() / 2 - curSketchData.backgroundBM.getWidth() / 2, (canvas.getHeight() / 2 - curSketchData.backgroundBM.getHeight() / 2));
             canvas.drawBitmap(curSketchData.backgroundBM, matrix, null);
 //            canvas.drawBitmap(curSketchData.backgroundBM, backgroundSrcRect, dstRect, null);
             Log.d(TAG, "drawBackground:src= " + backgroundSrcRect.toString() + ";dst=" + backgroundDstRect.toString());
@@ -314,7 +314,6 @@ public class SketchView extends View implements OnTouchListener {
         // 获得图片的宽高.
         int width = bm.getWidth();
         int height = bm.getHeight();
-        newHeight=newHeight-ScreenUtils.dip2px(mContext, 48);
 
         float scale;
         if(bm.getWidth()>=bm.getHeight()){
