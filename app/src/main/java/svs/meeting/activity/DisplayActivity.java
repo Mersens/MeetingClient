@@ -61,12 +61,18 @@ public class DisplayActivity extends BaseActivity {
                             if(type.equals(EventEntity.MQTT_MSG)){
                                 EventEntity.MQEntity entity=e.getMqEntity();
                                 String msg=entity.getMsgType();
-                                if(MsgType.MSG_RESPONSE.equals(msg)){
+                                if(MsgType.MSG_SHARE.equals(msg)){
                                     String str=entity.getContent();
-                                    JSONObject object=new JSONObject(str);
-                                    String t=object.getString("type");
-                                    if("shareScreen_agree".equals(t)){
-
+                                    if(str.contains(",")){
+                                        String strs[]=str.split(",");
+                                        if(strs[0].equals("START")){
+                                            String name=strs[1];
+                                            String url="rtmp://"+Config.LOCAL_HOST+"/live/"+name;
+                                            Log.e("SCREEN_PUSH_url","URL=="+url);
+                                            Bundle bundle=new Bundle();
+                                            bundle.putString("playUrl",url);
+                                            Helper.switchActivity(DisplayActivity.this, LivePlayerDemoActivity.class,bundle);
+                                        }
                                     }
                                 }
                             }

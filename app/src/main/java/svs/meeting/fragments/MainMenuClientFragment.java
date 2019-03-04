@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.media.projection.MediaProjectionManager;
 import android.net.Uri;
 import android.os.Build;
@@ -161,7 +162,6 @@ public class MainMenuClientFragment extends Fragment implements View.OnClickList
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
                 }
                 break;
             case REQUEST_CAMERA_PERMISSION: {
@@ -306,15 +306,10 @@ public class MainMenuClientFragment extends Fragment implements View.OnClickList
                         }
                     }));
 
-
-
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
-
 
     private void initViews(View view) {
         TextView txtTitle = (TextView) this.getView().findViewById(R.id.txtTitle);
@@ -342,6 +337,10 @@ public class MainMenuClientFragment extends Fragment implements View.OnClickList
             String strFont = Config.meetingInfo.getString("font");
             int fontSize = Config.meetingInfo.getInt("size");
             txtTitle.setTextSize(Helper.Px2Dp(this.getContext(), fontSize));
+            String color=Config.meetingInfo.getString("color");
+            if(!TextUtils.isEmpty(color)){
+                txtTitle.setTextColor(Color.parseColor("#"+color));
+            }
             //txtTitle.setTextColor(Color.parseColor("#"+Config.meetingInfo.getString("color")));
 
             String url = Config.WEB_URL + "/" + Config.meetingInfo.getString("logo");

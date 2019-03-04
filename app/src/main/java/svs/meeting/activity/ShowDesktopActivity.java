@@ -1,9 +1,11 @@
 package svs.meeting.activity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.SyncStateContract;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -66,9 +68,29 @@ public class ShowDesktopActivity extends BaseActivity {
         }
 
         try {
+
             String name = Config.display_atts.getString("cardName");
             String dept = Config.display_atts.getString("cardDept");
             String rose = Config.display_atts.getString("cardRole");
+            int nameSize = Config.display_atts.getInt("nameSize");
+            mTextName.setTextSize(Helper.Px2Dp(this, nameSize));
+            int deptSize = Config.display_atts.getInt("deptSize");
+            mTextDept.setTextSize(Helper.Px2Dp(this, deptSize));
+            int roleSize = Config.display_atts.getInt("roleSize");
+            mTextRose.setTextSize(Helper.Px2Dp(this, roleSize));
+            String nameColor=Config.display_atts.getString("nameColor");
+            if(!TextUtils.isEmpty(nameColor)){
+                mTextName.setTextColor(Color.parseColor("#"+nameColor));
+            }
+            String deptColor=Config.display_atts.getString("deptColor");
+            if(!TextUtils.isEmpty(deptColor)){
+                mTextDept.setTextColor(Color.parseColor("#"+deptColor));
+            }
+            String roleColor=Config.display_atts.getString("roleColor");
+            if(!TextUtils.isEmpty(roleColor)){
+                mTextRose.setTextColor(Color.parseColor("#"+roleColor));
+            }
+
             mTextName.setText(name);
             mTextDept.setText(dept);
             mTextRose.setText(rose);

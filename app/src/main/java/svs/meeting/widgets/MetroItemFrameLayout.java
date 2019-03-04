@@ -52,6 +52,7 @@ public class MetroItemFrameLayout extends FrameLayout implements IMetroItemRound
 
     @Override
     public void draw(Canvas canvas) {
+        super.draw(canvas);
         mMetroItemRound.draw(canvas);
     }
 

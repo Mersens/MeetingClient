@@ -34,7 +34,7 @@ import svs.meeting.util.DBUtil;
 public class Config {
     public static org.json.JSONObject appConfig=null;
     public static java.util.HashMap<String, String> contactsMap = new java.util.HashMap<String, String>();
-    public static String LOCAL_HOST = "192.168.1.132";
+    public static String LOCAL_HOST = "192.168.2.22";
     public static String WEB_HOST = LOCAL_HOST+":8888";
     public static final String updataPAK = "http://47.94.40.223/shopwork/shared/update/";
     public static final String WEB_URL = "http://"+WEB_HOST+"";
