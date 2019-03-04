@@ -80,15 +80,21 @@ public class ShowDesktopActivity extends BaseActivity {
             mTextRose.setTextSize(Helper.Px2Dp(this, roleSize));
             String nameColor=Config.display_atts.getString("nameColor");
             if(!TextUtils.isEmpty(nameColor)){
-                mTextName.setTextColor(Color.parseColor("#"+nameColor));
+                if(!"null".equals(nameColor)) {
+                    mTextName.setTextColor(Color.parseColor("#" + nameColor));
+                }
             }
             String deptColor=Config.display_atts.getString("deptColor");
             if(!TextUtils.isEmpty(deptColor)){
-                mTextDept.setTextColor(Color.parseColor("#"+deptColor));
+                if(!"null".equals(deptColor)) {
+                    mTextDept.setTextColor(Color.parseColor("#" + deptColor));
+                }
             }
             String roleColor=Config.display_atts.getString("roleColor");
             if(!TextUtils.isEmpty(roleColor)){
-                mTextRose.setTextColor(Color.parseColor("#"+roleColor));
+                if(!"null".equals(roleColor)) {
+                    mTextRose.setTextColor(Color.parseColor("#" + roleColor));
+                }
             }
 
             mTextName.setText(name);
