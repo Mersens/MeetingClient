@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.media.projection.MediaProjectionManager;
 import android.net.Uri;
 import android.os.Build;
@@ -274,14 +275,18 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
         LinearLayout.LayoutParams paramsBottom = (LinearLayout.LayoutParams) bottomPanel.getLayoutParams();
         paramsBottom.height = topHeight * 2 / 4;
         bottomPanel.setLayoutParams(paramsBottom);
-
         try {
             txtTitle.setText(Config.meetingInfo.getString("name"));
             String strFont = Config.meetingInfo.getString("font");
             int fontSize = Config.meetingInfo.getInt("size");
             txtTitle.setTextSize(Helper.Px2Dp(this.getContext(), fontSize));
             //txtTitle.setTextColor(Color.parseColor("#"+Config.meetingInfo.getString("color")));
-
+            String color=Config.meetingInfo.getString("color");
+            if(!TextUtils.isEmpty(color)){
+                if(!"null".equals(color)){
+                    txtTitle.setTextColor(Color.parseColor("#"+color));
+                }
+            }
             String url = Config.WEB_URL + "/" + Config.meetingInfo.getString("logo");
             View view = MainMenuFragment.this.getView();
             Glide.with(this).load(url)
