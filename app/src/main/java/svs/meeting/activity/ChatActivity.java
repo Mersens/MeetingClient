@@ -214,10 +214,12 @@ public class ChatActivity extends BaseActivity {
     }
 
     private void initDatas() {
+        queryMessages(null);
     }
 
     private void initSwipeLayout() {
-        sw_refresh.setEnabled(true);
+        sw_refresh.setEnabled(false);
+        sw_refresh.setVisibility(View.GONE);
         layoutManager = new LinearLayoutManager(this);
         rc_view.setLayoutManager(layoutManager);
         adapter = new ChatAdapter(this);
@@ -226,16 +228,16 @@ public class ChatActivity extends BaseActivity {
             @Override
             public void onGlobalLayout() {
                 ll_chat.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                sw_refresh.setRefreshing(true);
+                //sw_refresh.setRefreshing(true);
                 //自动刷新
-                queryMessages(null);
+                //queryMessages(null);
             }
         });
         //下拉加载
         sw_refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                queryMessages(null);
+               // queryMessages(null);
             }
         });
         //设置RecyclerView的点击事件

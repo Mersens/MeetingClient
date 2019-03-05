@@ -358,7 +358,7 @@ public class RecordService extends Service {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(3000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -470,11 +470,42 @@ public class RecordService extends Service {
     public void onDestroy() {
         super.onDestroy();
         MainMenuFragment.isPushScreen=false;
+        sendStopMsg();
         hideView();
         stopPush();
         release();
         if (mMpj != null) {
             mMpj.stop();
         }
+    }
+
+    private void sendStopMsg(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if(mPushThread!=null){
+                    try {
+                        String seat_no = Config.clientInfo.getString("tid");
+                        String uname = Config.clientInfo.getString("name");
+                        String split="\\~^";
+                        MqttManagerV3 mqtt=MqttManagerV3.getInstance();
+                        int h=DisplayHelper.getScreenHeight(getApplicationContext());
+                        int w=DisplayHelper.getScreenWidth(getApplicationContext());
+                        String msg="STOP";
+                        String strMsg=uname+split+seat_no+split+MsgType.MSG_SHARE +split +msg+split+new Date().getTime()+split+Config.CLIENT_IP;
+                        mqtt.send(strMsg,"");
+                        Log.e("MqttSend",strMsg);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        }).start();
     }
 }

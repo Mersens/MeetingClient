@@ -53,9 +53,7 @@ public class NotificationActivity extends BaseActivity {
     }
 
     private void showViews(final String type,String msg){
-        final TipsDialogFragment dialogFragment=TipsDialogFragment.getInstance(msg);
-        dialogFragment.setCancelText("拒绝");
-        dialogFragment.setOkText("同意");
+        final TipsDialogFragment dialogFragment=TipsDialogFragment.getInstance(msg,"拒绝","同意");
         dialogFragment.show(getSupportFragmentManager(),"NotifyViews");
         dialogFragment.setOnDialogClickListener(new TipsDialogFragment.OnDialogClickListener() {
             @Override
@@ -71,6 +69,7 @@ public class NotificationActivity extends BaseActivity {
                 NotificationActivity.this.finish();
             }
         });
+
     }
 
     private void sendInfo(String type){

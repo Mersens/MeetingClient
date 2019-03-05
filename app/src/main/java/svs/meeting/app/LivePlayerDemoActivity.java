@@ -3,6 +3,7 @@ package svs.meeting.app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,7 +42,14 @@ public class LivePlayerDemoActivity extends BaseActivity implements NodePlayerDe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live_player_demo);
-        url=getIntent().getStringExtra("playUrl");
+        if(getIntent().hasExtra("playUrl")){
+            url=getIntent().getStringExtra("playUrl");
+        }
+        if(TextUtils.isEmpty(url)){
+
+            return;
+        }
+
         initNodePlayer();
         initActionBar();
         initRxbus();
@@ -64,14 +72,10 @@ public class LivePlayerDemoActivity extends BaseActivity implements NodePlayerDe
                                 String msg=entity.getMsgType();
                                 if(MsgType.MSG_SHARE.equals(msg)){
                                     String str=entity.getContent();
-                                    if(str.contains(",")){
-                                        String strs[]=str.split(",");
-                                        if(strs[0].equals("STOP")){
+                                    if(str.equals("STOP")){
                                             np.stop();
                                             np.release();
-
                                             finish();
-                                        }
                                     }
                                 }
                             }
@@ -82,15 +86,12 @@ public class LivePlayerDemoActivity extends BaseActivity implements NodePlayerDe
         mCompositeDisposable.add(d);
     }
 
-
-
     private void initActionBar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle("外部视频");
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-
     }
 
     private void initNodePlayer() {
@@ -102,7 +103,7 @@ public class LivePlayerDemoActivity extends BaseActivity implements NodePlayerDe
         //设置播放视图的渲染器模式,可以使用SurfaceView或TextureView. 默认SurfaceView
         npv.setRenderType(NodePlayerView.RenderType.SURFACEVIEW);
         //设置视图的内容缩放模式
-        npv.setUIViewContentMode(NodePlayerView.UIViewContentMode.ScaleAspectFit);
+        npv.setUIViewContentMode(NodePlayerView.UIViewContentMode.ScaleToFill);
 
 
         //将播放视图绑定到播放器

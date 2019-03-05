@@ -210,12 +210,16 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
                                     if(str.contains(",")){
                                         String strs[]=str.split(",");
                                         if(strs[0].equals("START")){
-                                            String name=strs[1];
-                                            String url="rtmp://"+Config.LOCAL_HOST+"/live/"+name;
-                                            Log.e("SCREEN_PUSH_url","URL=="+url);
-                                            Bundle bundle=new Bundle();
-                                            bundle.putString("playUrl",url);
-                                            Helper.switchActivity(getActivity(), LivePlayerDemoActivity.class,bundle);
+                                            String name=strs[4];
+                                            String uname = Config.clientInfo.getString("name");
+                                            if(!name.equals(uname)){
+                                                String pushname=strs[1];
+                                                String url="rtmp://"+Config.LOCAL_HOST+"/live/"+pushname;
+                                                Log.e("SCREEN_PUSH_url","URL=="+url);
+                                                Bundle bundle=new Bundle();
+                                                bundle.putString("playUrl",url);
+                                                Helper.switchActivity(getActivity(), LivePlayerDemoActivity.class,bundle);
+                                            }
                                         }
                                     }
                                 }else if(MsgType.MSG_VOTE.equals(msg)){
@@ -253,19 +257,15 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
     }
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-
         TextView txtTitle = (TextView) this.getView().findViewById(R.id.txtTitle);
-
         XLog.log("==" + Config.meetingInfo);
-
         LinearLayout contentPanel = (LinearLayout) this.getView().findViewById(R.id.contentPanel);
         LinearLayout topPanel = (LinearLayout) this.getView().findViewById(R.id.topPanel);
         LinearLayout bottomPanel = (LinearLayout) this.getView().findViewById(R.id.bottomPanel);
         //GridLayout gridContent=(GridLayout)this.getView().findViewById(R.id.contentGrid);
         contentPanel.measure(0, 0);
         //XLog.log("top 宽:"+contentPanel.getMeasuredWidth()+",高:"+contentPanel.getMeasuredHeight()+",SW="+ Helper.screenWidth+",SH="+Helper.screenHeight);
-
-        int topHeight = Helper.screenHeight / 5;//(Helper.screenHeight-contentPanel.getMeasuredHeight())/2;
+        int topHeight = Helper.screenHeight / 4;//(Helper.screenHeight-contentPanel.getMeasuredHeight())/2;
         LinearLayout.LayoutParams paramsTop = (LinearLayout.LayoutParams) topPanel.getLayoutParams();
         paramsTop.height = topHeight;//Helper.Px2Dp(this.getContext(),topHeight);
         int marginInPx = (Helper.screenWidth - Helper.Dp2Px(getContext(), contentPanel.getWidth())) / 2;

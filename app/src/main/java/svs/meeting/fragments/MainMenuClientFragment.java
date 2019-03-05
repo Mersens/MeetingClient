@@ -195,20 +195,31 @@ public class MainMenuClientFragment extends Fragment implements View.OnClickList
                             }else if(type.equals(EventEntity.MQTT_MSG)){
                                 EventEntity.MQEntity entity=e.getMqEntity();
                                 String msg=entity.getMsgType();
-          /*                      if(MsgType.MSG_SHARE.equals(msg)){
+                                if(MsgType.MSG_SHARE.equals(msg)){
                                     String str=entity.getContent();
+                                    if("FORCESTOP".equals(str)){
+                                        Intent intent = new Intent(getActivity(), RecordService.class);
+                                        getActivity().stopService(intent);
+                                    }
                                     if(str.contains(",")){
                                         String strs[]=str.split(",");
                                         if(strs[0].equals("START")){
-                                            String name=strs[1];
-                                            String url="rtmp://"+Config.LOCAL_HOST+"/live/"+name;
-                                            Log.e("SCREEN_PUSH_url","URL=="+url);
-                                            Bundle bundle=new Bundle();
-                                            bundle.putString("playUrl",url);
-                                            Helper.switchActivity(getActivity(), LivePlayerDemoActivity.class,bundle);
+                                            String name=strs[4];
+                                            Log.e("name","name="+name);
+                                            String uname = Config.clientInfo.getString("name");
+                                            Log.e("uname","uname="+uname);
+                                            if(!name.equals(uname)){
+                                                String pushname=strs[1];
+                                                String url="rtmp://"+Config.LOCAL_HOST+"/live/"+pushname;
+                                                Log.e("url rtml","rtmp="+url);
+                                                Log.e("SCREEN_PUSH_url","URL=="+url);
+                                                Bundle bundle=new Bundle();
+                                                bundle.putString("playUrl",url);
+                                                Helper.switchActivity(getActivity(), LivePlayerDemoActivity.class,bundle);
+                                            }
                                         }
                                     }
-                                }*/ if(MsgType.MSG_VOTE.equals(msg)){
+                                } if(MsgType.MSG_VOTE.equals(msg)){
                                     String content=entity.getContent();
                                     JSONObject jsonObject=new JSONObject(content);
                                     String action=jsonObject.getString("action");
@@ -264,7 +275,6 @@ public class MainMenuClientFragment extends Fragment implements View.OnClickList
                                             //会议暂停
                                             String m=object.getString("text");
                                             showMeetingTips(m);
-
                                         }else if("quit".equals(action)){
                                             //会议开始
                                             String m=object.getString("text");
@@ -355,7 +365,7 @@ public class MainMenuClientFragment extends Fragment implements View.OnClickList
         contentPanel.measure(0, 0);
         //XLog.log("top 宽:"+contentPanel.getMeasuredWidth()+",高:"+contentPanel.getMeasuredHeight()+",SW="+ Helper.screenWidth+",SH="+Helper.screenHeight);
 
-        int topHeight = Helper.screenHeight / 5;//(Helper.screenHeight-contentPanel.getMeasuredHeight())/2;
+        int topHeight = Helper.screenHeight / 4;//(Helper.screenHeight-contentPanel.getMeasuredHeight())/2;
         LinearLayout.LayoutParams paramsTop = (LinearLayout.LayoutParams) topPanel.getLayoutParams();
         paramsTop.height = topHeight;//Helper.Px2Dp(this.getContext(),topHeight);
         int marginInPx = (Helper.screenWidth - Helper.Dp2Px(getContext(), contentPanel.getWidth())) / 2;
