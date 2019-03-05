@@ -255,6 +255,22 @@ public class MainMenuClientFragment extends Fragment implements View.OnClickList
                                     }
                                     NotificationUtils notificationUtils = new NotificationUtils(getActivity(), null);
                                     notificationUtils.sendNotification(title, title);
+                                }else if(MsgType.MSG_INFO.equals(entity.getMsgType())){
+                                    String str=entity.getContent();
+                                    JSONObject object=new JSONObject(str);
+                                    if(object.has("action")) {
+                                        String action = object.getString("action");
+                                        if("show".equals(action)){
+                                            //会议暂停
+                                            String m=object.getString("text");
+                                            showMeetingTips(m);
+
+                                        }else if("quit".equals(action)){
+                                            //会议开始
+                                            String m=object.getString("text");
+                                            showMeetingTips(m);
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -264,6 +280,24 @@ public class MainMenuClientFragment extends Fragment implements View.OnClickList
         mCompositeDisposable.add(d);
     }
 
+
+    private void showMeetingTips(String msg){
+        final TipsDialogFragment dialogFragment=TipsDialogFragment.getInstance(msg);
+        dialogFragment.show(getChildFragmentManager(),"showMettingTips");
+        dialogFragment.setOnDialogClickListener(new TipsDialogFragment.OnDialogClickListener() {
+            @Override
+            public void onClickCancel() {
+                dialogFragment.dismissAllowingStateLoss();
+            }
+
+            @Override
+            public void onClickOk() {
+
+                dialogFragment.dismissAllowingStateLoss();
+            }
+        });
+
+    }
     private void doLeave(){
         try {
             String seat_no = Config.clientInfo.getString("tid");

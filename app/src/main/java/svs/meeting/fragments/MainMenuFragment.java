@@ -287,12 +287,6 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
                 }
             }
             //txtTitle.setTextColor(Color.parseColor("#"+Config.meetingInfo.getString("color")));
-            String color=Config.meetingInfo.getString("color");
-            if(!TextUtils.isEmpty(color)){
-                if(!"null".equals(color)){
-                    txtTitle.setTextColor(Color.parseColor("#"+color));
-                }
-            }
             String url = Config.WEB_URL + "/" + Config.meetingInfo.getString("logo");
             View view = MainMenuFragment.this.getView();
             Glide.with(this).load(url)
