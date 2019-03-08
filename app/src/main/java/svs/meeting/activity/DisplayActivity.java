@@ -1,8 +1,10 @@
 package svs.meeting.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -63,10 +65,15 @@ public class DisplayActivity extends BaseActivity {
                                 String msg=entity.getMsgType();
                                 if(MsgType.MSG_SHARE.equals(msg)){
                                     String str=entity.getContent();
-                                    if(str.contains(",")){
-                                        String strs[]=str.split(",");
-                                        if(strs[0].equals("START")){
-                                            String name=strs[1];
+                                    JSONObject object=new JSONObject(str);
+                                    String action=object.getString("action");
+                                    if("START".equals(action)){
+                                        String name=object.getString("videoName");
+                                        int w=object.getInt("width");
+                                        int h=object.getInt("height");
+                                        String userLabel=object.getString("userLabel");
+                                        String uname = Config.clientInfo.getString("name");
+                                        if(!userLabel.equals(uname)){
                                             String url="rtmp://"+Config.LOCAL_HOST+"/live/"+name;
                                             Log.e("SCREEN_PUSH_url","URL=="+url);
                                             Bundle bundle=new Bundle();
@@ -74,6 +81,7 @@ public class DisplayActivity extends BaseActivity {
                                             Helper.switchActivity(DisplayActivity.this, LivePlayerDemoActivity.class,bundle);
                                         }
                                     }
+
                                 }
                             }
                         }
@@ -90,6 +98,15 @@ public class DisplayActivity extends BaseActivity {
             String time=Config.meetingInfo.getString("meeting_time");
             mTextTitle.setText(name);
             mTextTitle.setTextSize(fontSize);
+            String color=Config.meetingInfo.getString("color");
+            if(!TextUtils.isEmpty(color)){
+                if(!"null".equals(color)){
+                    mTextTitle.setTextColor(Color.parseColor("#"+color));
+                    mTextTime.setTextColor(Color.parseColor("#"+color));
+                }
+            }
+
+
             mTextTime.setText("会议召开进行时："+time);
             final String url = Config.WEB_URL + "/" + Config.meetingInfo.getString("logo");
             Glide.with(DisplayActivity.this)

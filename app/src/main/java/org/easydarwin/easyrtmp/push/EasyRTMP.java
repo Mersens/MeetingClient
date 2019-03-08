@@ -104,6 +104,7 @@ public class EasyRTMP implements Pusher {
             public void onCallback(int code) {
                 if (code != this.code) {
                     this.code = code;
+                    Log.e("EasyRTMP code","EasyRTMP code ="+code);
                     if (callback != null) callback.onCallback(code);
                 }
             }

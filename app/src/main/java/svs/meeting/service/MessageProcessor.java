@@ -108,7 +108,7 @@ public class MessageProcessor {
         EventEntity eventEntity = new EventEntity();
         eventEntity.type = EventEntity.MQTT_MSG;
         EventEntity.MQEntity entity = new EventEntity.MQEntity();
-        entity.setTopic("svs/all");
+        entity.setTopic(topic);
         entity.setMsgType(msgType);
         entity.setClientId(clientId);
         entity.setTime(time);

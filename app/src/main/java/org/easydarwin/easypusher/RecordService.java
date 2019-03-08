@@ -36,8 +36,10 @@ import org.easydarwin.audio.AudioStream;
 import org.easydarwin.easyrtmp.push.EasyRTMP;
 import org.easydarwin.push.Pusher;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import svs.meeting.app.MainActivity;
@@ -292,15 +294,19 @@ public class RecordService extends Service {
 
     private void startPush() {
         MainMenuFragment.isPushScreen=true;
-        if (mPushThread != null) return;
+        if (mPushThread != null) {
+            return;
+        }
         mPushThread = new Thread(){
             @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void run() {
+                Log.e("RTMPRUN","url"+1111111);
                 String url = Config.VIDEOPUSH_URL;
                 mEasyPusher = new EasyRTMP();
                // url = MyApplication.getInstance().getUrl() + "_s";
-                mEasyPusher.initPush(url, getApplicationContext(), null);
+                mEasyPusher.initPush(url, MyApplication.getInstance(), null);
+                Log.e("RTMPRUN","url"+url);
                 try {
                     audioStream.addPusher(mEasyPusher);
                     while (mPushThread != null) {
@@ -340,7 +346,6 @@ public class RecordService extends Service {
 
                             mEasyPusher.push(outData, mBufferInfo.presentationTimeUs / 1000, 1);
 
-
                             mMediaCodec.releaseOutputBuffer(index, false);
 
                         }
@@ -358,20 +363,28 @@ public class RecordService extends Service {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(3000);
+                    Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 if(mPushThread!=null){
                     try {
+
                         String seat_no = Config.clientInfo.getString("tid");
                         String uname = Config.clientInfo.getString("name");
                         String split="\\~^";
                         MqttManagerV3 mqtt=MqttManagerV3.getInstance();
                         int h=DisplayHelper.getScreenHeight(getApplicationContext());
                         int w=DisplayHelper.getScreenWidth(getApplicationContext());
-                        String msg="START,"+Config.VIDEOPUSH_NAME+","+w+","+h+","+uname;
-                        String strMsg=uname+split+seat_no+split+MsgType.MSG_SHARE +split +msg+split+new Date().getTime()+split+Config.CLIENT_IP;
+                        JSONObject object=new JSONObject();
+                        object.put("action","START");
+                        object.put("shareMode","01");
+                        object.put("videoName",Config.VIDEOPUSH_NAME);
+                        object.put("width",w);
+                        object.put("height",h);
+                        object.put("userLabel",uname);
+                        String msg=object.toString();
+                        String strMsg=uname+split+seat_no+split+MsgType.MSG_SHARE +split +msg+split+getNowTime()+split+Config.CLIENT_IP;
                         mqtt.send(strMsg,"");
                         Log.e("MqttSend",strMsg);
                     } catch (JSONException e) {
@@ -379,16 +392,20 @@ public class RecordService extends Service {
                     }
 
                 }
-
-
             }
         }).start();
         startVirtualDisplay();
     }
 
+    private String getNowTime(){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        return dateFormat.format(new Date());
+
+    }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void stopPush(){
+        Log.i("stopPush", " stopPush ");
         Thread t = mPushThread;
         if (t != null){
             mPushThread = null;
@@ -406,15 +423,14 @@ public class RecordService extends Service {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void startVirtualDisplay() {
         if (mMpj == null) {
-            mMpj = mMpmngr.getMediaProjection(MainMenuFragment.mResultCode, MainMenuFragment.mResultIntent);
-            MainMenuFragment.mResultCode = 0;
-            MainMenuFragment.mResultIntent = null;
+            mMpj = mMpmngr.getMediaProjection(MainActivity.mResultCode, MainActivity.mResultIntent);
+            MainActivity.mResultCode = 0;
+            MainActivity.mResultIntent = null;
         }
         if (mMpj == null) return;
         mVirtualDisplay = mMpj.createVirtualDisplay("record_screen", windowWidth, windowHeight, screenDensity,
                 DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR|DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC|DisplayManager.VIRTUAL_DISPLAY_FLAG_PRESENTATION, mSurface, null, null);
     }
-
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void encodeToVideoTrack(int index) {
@@ -468,7 +484,6 @@ public class RecordService extends Service {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onDestroy() {
-        super.onDestroy();
         MainMenuFragment.isPushScreen=false;
         sendStopMsg();
         hideView();
@@ -477,18 +492,15 @@ public class RecordService extends Service {
         if (mMpj != null) {
             mMpj.stop();
         }
+        super.onDestroy();
+
     }
 
     private void sendStopMsg(){
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                if(mPushThread!=null){
+
                     try {
                         String seat_no = Config.clientInfo.getString("tid");
                         String uname = Config.clientInfo.getString("name");
@@ -496,8 +508,11 @@ public class RecordService extends Service {
                         MqttManagerV3 mqtt=MqttManagerV3.getInstance();
                         int h=DisplayHelper.getScreenHeight(getApplicationContext());
                         int w=DisplayHelper.getScreenWidth(getApplicationContext());
-                        String msg="STOP";
-                        String strMsg=uname+split+seat_no+split+MsgType.MSG_SHARE +split +msg+split+new Date().getTime()+split+Config.CLIENT_IP;
+                        JSONObject object=new JSONObject();
+                        object.put("action","STOP");
+                        object.put("shareMode","01");
+                        String msg=object.toString();
+                        String strMsg=uname+split+seat_no+split+MsgType.MSG_SHARE +split +msg+split+getNowTime()+split+Config.CLIENT_IP;
                         mqtt.send(strMsg,"");
                         Log.e("MqttSend",strMsg);
                     } catch (JSONException e) {
@@ -505,7 +520,7 @@ public class RecordService extends Service {
                     }
                 }
 
-            }
+
         }).start();
     }
 }

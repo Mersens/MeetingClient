@@ -34,6 +34,9 @@
                     android:layout_width="wrap_content"
                     android:textSize="24sp"
                     android:text="Title"
+                    android:gravity="center"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginLeft="16dp"
                     android:layout_centerInParent="true"
                    />
             </RelativeLayout>

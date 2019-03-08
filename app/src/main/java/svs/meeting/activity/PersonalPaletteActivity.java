@@ -127,6 +127,7 @@ public class PersonalPaletteActivity extends BaseActivity implements WhiteBoardF
         });
     }
     private void getPaletteBgInfo() {
+
         Map<String, String> map = Config.getParameters();
         RequestManager.getInstance()
                 .mServiceStore
@@ -721,7 +722,7 @@ public class PersonalPaletteActivity extends BaseActivity implements WhiteBoardF
             params.put("end_filter", "on_upload_image");
             params.put("rawImage", bitmapBuffer);
             JSONObject map = new JSONObject();
-            map.put("file_id", getUUID());
+            map.put("file_id", 1);
             map.put("meeting_id", id);
             map.put("meeting_name", meeting_name);
             map.put("uid", seat_no);
@@ -745,7 +746,7 @@ public class PersonalPaletteActivity extends BaseActivity implements WhiteBoardF
                     .subscribe(new ResultObserver(new RequestManager.onRequestCallBack() {
                         @Override
                         public void onSuccess(String msg) {
-                            Log.e("saveDoc", msg);
+                            Log.e("saveDoc success", msg);
                             if (!TextUtils.isEmpty(msg)) {
                                 try {
                                     JSONObject json = new JSONObject(msg);
@@ -758,6 +759,7 @@ public class PersonalPaletteActivity extends BaseActivity implements WhiteBoardF
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
+                                    Log.e("saveDoc失败！", e.getMessage().toString());
                                 }
                             }
                         }
@@ -773,9 +775,8 @@ public class PersonalPaletteActivity extends BaseActivity implements WhiteBoardF
     }
 
 
-    private String getUUID(){
-        UUID uuid = UUID.randomUUID();
-        return uuid.toString();
+    private String getID(){
+        return new Date().getTime()+"";
     }
 
     private String getNowTime() {

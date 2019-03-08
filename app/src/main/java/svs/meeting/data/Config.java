@@ -34,7 +34,7 @@ import svs.meeting.util.DBUtil;
 public class Config {
     public static org.json.JSONObject appConfig=null;
     public static java.util.HashMap<String, String> contactsMap = new java.util.HashMap<String, String>();
-    public static String LOCAL_HOST = "192.168.1.76";
+    public static String LOCAL_HOST = "192.168.2.22";
     public static String WEB_HOST = LOCAL_HOST+":8888";
     public static final String updataPAK = "http://47.94.40.223/shopwork/shared/update/";
     public static final String WEB_URL = "http://"+WEB_HOST+"";
@@ -55,7 +55,6 @@ public class Config {
     //APP内部铃声
     public static ArrayList<VoiceMode> voiceList = new ArrayList<>();
     private static String defaultSound=null;
-
     private static String TAG = Config.class.getSimpleName();
     //区别个人账户和企业账户标识
     public static String isChange = "0";//0：个人账户 110:企业账户

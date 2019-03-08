@@ -1,6 +1,7 @@
 package svs.meeting.fragments;
 
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -69,6 +70,7 @@ import svs.meeting.data.Config;
 import svs.meeting.data.EventEntity;
 import svs.meeting.data.IntentType;
 import svs.meeting.data.MsgType;
+import svs.meeting.listener.OnScreenPushListener;
 import svs.meeting.service.FloatMenuService;
 import svs.meeting.service.MqttManagerV3;
 import svs.meeting.util.DisplayHelper;
@@ -80,30 +82,23 @@ import svs.meeting.util.XLog;
 import svs.meeting.widgets.DrawingOrderRelativeLayout;
 import svs.meeting.widgets.MetroItemFrameLayout;
 import svs.meeting.widgets.TipsDialogFragment;
-
-import static android.app.Activity.RESULT_OK;
-import static android.content.Context.MEDIA_PROJECTION_SERVICE;
-import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static org.easydarwin.update.UpdateMgr.MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE;
 
 public class MainMenuFragment extends Fragment implements View.OnClickListener {
     private CompositeDisposable mCompositeDisposable;
-    public static final int REQUEST_OVERLAY_PERMISSION = 1004;
-    public static final String KEY_ENABLE_BACKGROUND_CAMERA = "key_enable_background_camera";
-    private static final int REQUEST_SCAN_TEXT_URL = 1003;
-    static final String TAG = "EasyPusher";
-    public static final int REQUEST_MEDIA_PROJECTION = 1002;
     public static final int REQUEST_CAMERA_PERMISSION = 1003;
-    public static final int REQUEST_STORAGE_PERMISSION = 1004;
-    private boolean mNeedGrantedPermission;
-    private BackgroundCameraService mService;
-    private ServiceConnection conn;
-    public static Intent mResultIntent;
-    public static int mResultCode;
     public static boolean isPushScreen=false;
     private int type=-1;
     private ImageView mImgZTHY;
     private TextView mTextZTHY;
+    private OnScreenPushListener listener;
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        listener=(MainActivity)context;
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -116,18 +111,8 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
         initViews(view);
         initRxbus();
-        if(Build.VERSION.SDK_INT >Build.VERSION_CODES.LOLLIPOP){
-            if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA) != PERMISSION_GRANTED ||
-                    ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.RECORD_AUDIO) != PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.CAMERA, android.Manifest.permission.RECORD_AUDIO}, REQUEST_CAMERA_PERMISSION);
-                mNeedGrantedPermission = true;
-                return;
-            } else {
-                // resume..
-            }
-        }else {
-            goonWithPermissionGranted();
-        }
+
+
         type=getArguments().getInt("type",type);
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -148,20 +133,6 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
         Intent intent = new Intent(getActivity(), BackgroundCameraService.class);
         getActivity().startService(intent);
 
-        conn = new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-                mService = ((BackgroundCameraService.LocalBinder) iBinder).getService();
-//                mMediaStream = EasyApplication.sMS;
-
-            }
-
-            @Override
-            public void onServiceDisconnected(ComponentName componentName) {
-            }
-        };
-        getActivity().bindService(new Intent(getActivity(), BackgroundCameraService.class), conn, 0);
-
     }
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -171,13 +142,12 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
                 }
                 break;
             case REQUEST_CAMERA_PERMISSION: {
                 if (grantResults.length > 1
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                    mNeedGrantedPermission = false;
+
                     goonWithPermissionGranted();
 
                 } else {
@@ -200,6 +170,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
                             String type = e.type;
                             String v = e.value;
                             if (type.equals("stop_push")) {
+                                Log.e("stop_push","stop_push");
                                 Intent intent = new Intent(getActivity(), RecordService.class);
                                 getActivity().stopService(intent);
                             }else if(type.equals(EventEntity.MQTT_MSG)){
@@ -207,21 +178,23 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
                                 String msg=entity.getMsgType();
                                 if(MsgType.MSG_SHARE.equals(msg)){
                                     String str=entity.getContent();
-                                    if(str.contains(",")){
-                                        String strs[]=str.split(",");
-                                        if(strs[0].equals("START")){
-                                            String name=strs[4];
-                                            String uname = Config.clientInfo.getString("name");
-                                            if(!name.equals(uname)){
-                                                String pushname=strs[1];
-                                                String url="rtmp://"+Config.LOCAL_HOST+"/live/"+pushname;
-                                                Log.e("SCREEN_PUSH_url","URL=="+url);
-                                                Bundle bundle=new Bundle();
-                                                bundle.putString("playUrl",url);
-                                                Helper.switchActivity(getActivity(), LivePlayerDemoActivity.class,bundle);
-                                            }
+                                    JSONObject object=new JSONObject(str);
+                                        String action=object.getString("action");
+                                    if("START".equals(action)) {
+                                        String name = object.getString("videoName");
+                                        int w = object.getInt("width");
+                                        int h = object.getInt("height");
+                                        String userLabel = object.getString("userLabel");
+                                        String uname = Config.clientInfo.getString("name");
+                                        if (!userLabel.equals(uname)) {
+                                            String url = "rtmp://" + Config.LOCAL_HOST + "/live/" + name;
+                                            Log.e("SCREEN_PUSH_url", "URL==" + url);
+                                            Bundle bundle = new Bundle();
+                                            bundle.putString("playUrl", url);
+                                            Helper.switchActivity(getActivity(), LivePlayerDemoActivity.class, bundle);
                                         }
                                     }
+
                                 }else if(MsgType.MSG_VOTE.equals(msg)){
                                     String content=entity.getContent();
                                     JSONObject jsonObject=new JSONObject(content);
@@ -414,9 +387,8 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
                 showPublicPaletteView("确定启动公共白板？");
                 break;
             case R.id.view8://外部视频
-                Bundle bundle=new Bundle();
-                bundle.putString("playUrl", Config.WEB_URL + "/upload/kda.mp4");
-                Helper.switchActivity(this.getActivity(), LivePlayerDemoActivity.class,bundle);
+
+                Helper.switchActivity(this.getActivity(), LivePlayerDemoActivity.class);
                 break;
             case R.id.view14://桌面显示
                 Helper.switchActivity(this.getActivity(), ShowDesktopActivity.class);
@@ -641,84 +613,19 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onClickOk() {
                 dialogFragment.dismissAllowingStateLoss();
-                onPushScreen();
-                //开启同屏
+                if(listener!=null){
+                    listener.onStartPush();
+                }
             }
         });
     }
-    public void onPushScreen() {
-        //Helper.switchActivity(this.getActivity(), StreamActivity.class);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            new AlertDialog.Builder(getActivity()).setMessage("推送屏幕需要安卓5.0以上,您当前系统版本过低,不支持该功能。").setTitle("抱歉").show();
-            return;
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!Settings.canDrawOverlays(getActivity())) {
-
-                new AlertDialog.Builder(getActivity()).setMessage("推送屏幕需要APP出现在顶部.是否确定?").setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                        final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + BuildConfig.APPLICATION_ID));
-                        startActivityForResult(intent, REQUEST_OVERLAY_PERMISSION);
-                    }
-                }).setNegativeButton(android.R.string.cancel,null).setCancelable(false).show();
-                return;
-            }
-        }
-
-
-        if (RecordService.mEasyPusher != null) {
-            Intent intent = new Intent(getActivity(), RecordService.class);
-            getActivity().stopService(intent);
-
-        } else {
-            startScreenPushIntent();
-        }
-
-
-    }
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_MEDIA_PROJECTION) {
-            if (resultCode == RESULT_OK) {
-                Log.e(TAG, "get capture permission success!");
-                mResultCode = resultCode;
-                mResultIntent = data;
-                startScreenPushIntent();
-
-            }
-        }
-    }
-
-    private void startScreenPushIntent() {
-
-       if (mResultIntent != null && mResultCode != 0) {
-            Intent intent = new Intent(getActivity(), RecordService.class);
-            getActivity().startService(intent);
-
-        } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                MediaProjectionManager mMpMngr = (MediaProjectionManager) getActivity().getSystemService(MEDIA_PROJECTION_SERVICE);
-                startActivityForResult(mMpMngr.createScreenCaptureIntent(), REQUEST_MEDIA_PROJECTION);
-            }
-        }
-    }
-
 
     @Override
     public void onDestroy() {
-        if (!mNeedGrantedPermission) {
-            getActivity().unbindService(conn);
-
-        }
         mCompositeDisposable.clear();
         super.onDestroy();
 
     }
-
 
     public static MainMenuFragment getInstance(int type){
         MainMenuFragment fragment=new MainMenuFragment();
@@ -726,8 +633,6 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
         bundle.putInt("type",type);
         fragment.setArguments(bundle);
         return fragment;
-
-
     }
 
 

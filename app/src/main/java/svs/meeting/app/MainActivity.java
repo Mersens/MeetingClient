@@ -4,15 +4,21 @@ import android.Manifest;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.graphics.Color;
+import android.media.projection.MediaProjectionManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +27,8 @@ import android.widget.Toast;
 
 import com.github.promeg.pinyinhelper.Pinyin;
 
+import org.easydarwin.easypusher.BackgroundCameraService;
+import org.easydarwin.easypusher.RecordService;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,13 +52,10 @@ import svs.meeting.activity.BaseActivity;
 import svs.meeting.activity.CallServiceActivity;
 import svs.meeting.activity.ChatActivity;
 import svs.meeting.activity.NotificationActivity;
-import svs.meeting.activity.PublicPaletteActivity;
-import svs.meeting.activity.ServiceActivity;
 import svs.meeting.activity.ShowDesktopActivity;
 import svs.meeting.activity.SignInActivity;
 import svs.meeting.activity.SignInShowActivity;
 import svs.meeting.activity.VoteBallotDetailActivity;
-import svs.meeting.app.R;
 import svs.meeting.data.Config;
 import svs.meeting.data.EventEntity;
 import svs.meeting.data.Friend;
@@ -63,7 +68,7 @@ import svs.meeting.fragments.FirstFragment;
 import svs.meeting.fragments.MainMenuClientFragment;
 import svs.meeting.fragments.MainMenuFragment;
 import svs.meeting.fragments.SecondFragment;
-import svs.meeting.service.FloatMenuService;
+import svs.meeting.listener.OnScreenPushListener;
 import svs.meeting.service.LocalService;
 import svs.meeting.service.MessageProcessor;
 import svs.meeting.util.DBUtil;
@@ -76,10 +81,18 @@ import svs.meeting.util.SharePreferenceUtil;
 import svs.meeting.util.XLog;
 import svs.meeting.widgets.TipsDialogFragment;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener, EasyPermissions.PermissionCallbacks {
+public class MainActivity extends BaseActivity implements View.OnClickListener, EasyPermissions.PermissionCallbacks ,OnScreenPushListener {
     private CompositeDisposable mCompositeDisposable;
     private DBDao dao;
-
+    public static final int REQUEST_OVERLAY_PERMISSION = 1004;
+    public static final String KEY_ENABLE_BACKGROUND_CAMERA = "key_enable_background_camera";
+    private static final int REQUEST_SCAN_TEXT_URL = 1003;
+    static final String TAG = "EasyPusher";
+    public static final int REQUEST_MEDIA_PROJECTION = 1002;
+    public static final int REQUEST_CAMERA_PERMISSION = 1003;
+    public static final int REQUEST_STORAGE_PERMISSION = 1004;
+    public static Intent mResultIntent;
+    public static int mResultCode;
     // Used to load the 'native-lib' library on application startup.
     static {
         System.loadLibrary("native-lib");
@@ -127,6 +140,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 Config.display_atts = Config.clientInfo.getJSONObject("display_atts");
                 Config.myid = Config.clientInfo.getString("id");
                 Config.isAllowSignAgain = Config.signSetting.getBoolean("allow_sign_again");
+                Config.CLIENT_IP = Config.clientInfo.getString("ip_addr");
             }
             dev_type = Config.clientInfo.getString("dev_type");
         } catch (JSONException e) {
@@ -290,10 +304,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
                                         }
                                     }
-                                }if(MsgType.MSG_REQUEST.equals(mqEntity.getMsgType())){
+                                }else if(MsgType.MSG_REQUEST.equals(mqEntity.getMsgType())){
                                     String str=mqEntity.getContent();
                                     String strs[] = str.split(";");
                                     JSONObject object=new JSONObject(strs[0]);
+                                    String name = Config.clientInfo.getString("name");
                                     String t=object.getString("type");
                                     String title=null;
                                     String msg=null;
@@ -312,13 +327,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                         msg=uname+"申请离开";
                                         dex=3;
                                     }
-                                    Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
-                                    intent.putExtra("name",uname);
-                                    intent.putExtra("type",dex);
-                                    PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, -1, intent
-                                            , PendingIntent.FLAG_UPDATE_CURRENT);
-                                    NotificationUtils notificationUtils = new NotificationUtils(MainActivity.this, pendingIntent);
-                                    notificationUtils.sendNotification(title, msg);
+                                    String dev_type=Config.clientInfo.getString("dev_type");
+                                    if(!uname.equals(name) && "01".equals(dev_type)){
+                                        Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
+                                        intent.putExtra("name",uname);
+                                        intent.putExtra("type",dex);
+                                        PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, -1, intent
+                                                , PendingIntent.FLAG_UPDATE_CURRENT);
+                                        NotificationUtils notificationUtils = new NotificationUtils(MainActivity.this, pendingIntent);
+                                        notificationUtils.sendNotification(title, msg);
+                                    }
+
+                                }else if(MsgType.MSG_SERVER_REP.equals(mqEntity.getMsgType())){
+                                    String str=mqEntity.getContent();
+                                    JSONObject object=new JSONObject(str);
+                                    String action=object.getString("action");
+                                    if("sync_time".equals(action)){
+                                        showExitViews("配置更新，请重新打开应用！");
+                                    }
                                 }
                             }
                         }
@@ -328,6 +354,27 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mCompositeDisposable.add(d);
     }
 
+
+    private void showExitViews(String msg){
+        final TipsDialogFragment dialogFragment=TipsDialogFragment.getInstance(msg);
+        dialogFragment.show(getSupportFragmentManager(),"showExitViews");
+        dialogFragment.setOnDialogClickListener(new TipsDialogFragment.OnDialogClickListener() {
+            @Override
+            public void onClickCancel() {
+                dialogFragment.dismissAllowingStateLoss();
+                MyApplication.getInstance().exit();
+
+            }
+
+            @Override
+            public void onClickOk() {
+                dialogFragment.dismissAllowingStateLoss();
+                MyApplication.getInstance().exit();
+
+            }
+        });
+
+    }
     private String getNowTime() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return dateFormat.format(new Date());
@@ -474,6 +521,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
      */
     public native String stringFromJNI();
 
+    @Override
+    public void onStartPush() {
+
+        onPushScreen();
+
+    }
+
     private class LocalReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -560,6 +614,67 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
      */
     public void onRequestPermissionsResult(boolean result, int requestCode) {
 
+    }
+    public void onPushScreen() {
+        //Helper.switchActivity(this.getActivity(), StreamActivity.class);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            new AlertDialog.Builder(this).setMessage("推送屏幕需要安卓5.0以上,您当前系统版本过低,不支持该功能。").setTitle("抱歉").show();
+            return;
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(this)) {
+
+                new AlertDialog.Builder(this).setMessage("推送屏幕需要APP出现在顶部.是否确定?").setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + BuildConfig.APPLICATION_ID));
+                        startActivityForResult(intent, REQUEST_OVERLAY_PERMISSION);
+                    }
+                }).setNegativeButton(android.R.string.cancel,null).setCancelable(false).show();
+                return;
+            }
+        }
+
+
+        if (RecordService.mEasyPusher != null) {
+            Intent intent = new Intent(getApplicationContext(), RecordService.class);
+             stopService(intent);
+
+        } else {
+            startScreenPushIntent();
+        }
+
+
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_MEDIA_PROJECTION) {
+            if (resultCode == RESULT_OK) {
+                Log.e(TAG, "get capture permission success!");
+                mResultCode = resultCode;
+                mResultIntent = data;
+                startScreenPushIntent();
+
+            }
+        }
+    }
+
+    private void startScreenPushIntent() {
+        if (mResultIntent != null && mResultCode != 0) {
+           Intent intent = new Intent(getApplicationContext(), RecordService.class);
+            Log.e("1111","11111");
+             startService(intent);
+
+        } else {
+           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                MediaProjectionManager mMpMngr = (MediaProjectionManager)getApplicationContext().getSystemService(MEDIA_PROJECTION_SERVICE);
+                Log.e("1111","222222");
+                startActivityForResult(mMpMngr.createScreenCaptureIntent(), REQUEST_MEDIA_PROJECTION);
+            }
+        }
     }
 
 }

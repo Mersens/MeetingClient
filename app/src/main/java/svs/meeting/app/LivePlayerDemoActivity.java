@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import org.easydarwin.easypusher.RecordService;
 import org.json.JSONObject;
@@ -42,18 +43,22 @@ public class LivePlayerDemoActivity extends BaseActivity implements NodePlayerDe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live_player_demo);
+        initActionBar();
         if(getIntent().hasExtra("playUrl")){
             url=getIntent().getStringExtra("playUrl");
         }
         if(TextUtils.isEmpty(url)){
-
+            Toast.makeText(this, "播放地址无效！", Toast.LENGTH_SHORT).show();
             return;
+
         }
 
         initNodePlayer();
-        initActionBar();
+
         initRxbus();
     }
+
+
 
     private void initRxbus() {
         mCompositeDisposable = new CompositeDisposable();
@@ -72,7 +77,9 @@ public class LivePlayerDemoActivity extends BaseActivity implements NodePlayerDe
                                 String msg=entity.getMsgType();
                                 if(MsgType.MSG_SHARE.equals(msg)){
                                     String str=entity.getContent();
-                                    if(str.equals("STOP")){
+                                    JSONObject object=new JSONObject(str);
+                                    String action=object.getString("action");
+                                    if(action.equals("STOP")){
                                             np.stop();
                                             np.release();
                                             finish();
@@ -178,16 +185,20 @@ public class LivePlayerDemoActivity extends BaseActivity implements NodePlayerDe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        /**
-         * 停止播放
-         */
-        np.stop();
+        if(np!=null){
+            /**
+             * 停止播放
+             */
+            np.stop();
 
-        /**
-         * 释放资源
-         */
-        np.release();
-        mCompositeDisposable.clear();
+            /**
+             * 释放资源
+             */
+            np.release();
+        }
+        if(mCompositeDisposable!=null){
+            mCompositeDisposable.clear();
+        }
     }
 
 

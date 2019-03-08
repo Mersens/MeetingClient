@@ -130,7 +130,7 @@ public class FilesActivity extends BaseActivity implements ListView.OnItemClickL
         FileItem item=fileList.get(i);
         String path=item.getFile_path();
         Bundle bd=new Bundle();
-        if(path.endsWith(".flv")){
+        if(path.endsWith(".flv")||path.endsWith(".mp4")){
             String url=Config.WEB_URL+"/"+path;
             bd.putString("playUrl",url);
             Helper.switchActivity(FilesActivity.this, LivePlayerDemoActivity.class,bd);
