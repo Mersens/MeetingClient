@@ -523,8 +523,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void onStartPush() {
-
         onPushScreen();
+
+    }
+
+    @Override
+    public void onStopPush() {
+        Intent intent = new Intent(this, RecordService.class);
+        stopService(intent);
 
     }
 

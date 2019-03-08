@@ -105,7 +105,6 @@ public class MainMenuClientFragment extends Fragment implements View.OnClickList
         super.onViewCreated(view, savedInstanceState);
         initViews(view);
         initRxbus();
-
         type=getArguments().getInt("type",type);
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -176,6 +175,11 @@ public class MainMenuClientFragment extends Fragment implements View.OnClickList
                                             bundle.putString("playUrl",url);
                                             Helper.switchActivity(getActivity(), LivePlayerDemoActivity.class,bundle);
                                         }
+                                    }else if("FORCESTOP".equals(action)){
+                                        if(listener!=null){
+                                            listener.onStopPush();
+                                        }
+
                                     }
 
                                 } if(MsgType.MSG_VOTE.equals(msg)){

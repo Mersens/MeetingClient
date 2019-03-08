@@ -193,8 +193,12 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
                                             bundle.putString("playUrl", url);
                                             Helper.switchActivity(getActivity(), LivePlayerDemoActivity.class, bundle);
                                         }
-                                    }
+                                    }else if("FORCESTOP".equals(action)){
+                                        if(listener!=null){
+                                            listener.onStopPush();
+                                        }
 
+                                    }
                                 }else if(MsgType.MSG_VOTE.equals(msg)){
                                     String content=entity.getContent();
                                     JSONObject jsonObject=new JSONObject(content);
